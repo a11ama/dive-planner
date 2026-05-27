@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>潛旅資料庫 — 互動看板</title>
+<style>
+  :root{--teal:#0F6E56;--teal-light:#E1F5EE;--teal-mid:#1D9E75;--teal-dark:#0a5240;--amber:#BA7517;--amber-light:#FAEEDA;--navy:#1a2e44;--purple:#5E3A87;--purple-light:#F3EFFE;--red:#C0392B;--red-light:#FFF0EE;--dark:#1A1A1A;--secondary:#555;--muted:#888;--bg:#F4F6F9;--white:#fff;--border:#E0E4EA;--radius:10px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'PingFang TC','Microsoft JhengHei',Arial,sans-serif;background:var(--bg);color:var(--dark);font-size:14px}
+  .header{background:linear-gradient(135deg,var(--teal-dark) 0%,var(--teal-mid) 100%);color:#fff;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .header h1{font-size:20px;font-weight:700}.header p{font-size:12px;opacity:.8;margin-top:3px}
+  .header-badge{background:rgba(255,255,255,.18);border-radius:20px;padding:4px 14px;font-size:12px;white-space:nowrap}
+  .plan-banner{background:linear-gradient(135deg,#085041 0%,#0F6E56 60%,#1D9E75 100%);color:#fff;padding:14px 28px;display:flex;flex-wrap:wrap;align-items:center;gap:0;border-bottom:3px solid var(--teal-dark)}
+  .pb-item{padding:6px 20px 6px 0;margin-right:20px;border-right:1px solid rgba(255,255,255,.2)}.pb-item:last-of-type{border-right:none}
+  .pb-label{font-size:11px;opacity:.7;margin-bottom:2px}.pb-main{font-size:22px;font-weight:800;letter-spacing:.5px}.pb-sub{font-size:11px;opacity:.65;margin-top:1px}
+  .pb-warn{margin-left:auto;background:rgba(255,165,0,.28);border-radius:6px;padding:6px 14px;font-size:11px;line-height:1.5}
+  .tabs{display:flex;background:var(--white);border-bottom:2px solid var(--border);padding:0 24px;overflow-x:auto;position:sticky;top:0;z-index:10}
+  .tab{padding:13px 16px;font-size:13px;font-weight:500;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;color:var(--secondary);transition:all .18s}
+  .tab.active{color:var(--teal);border-bottom-color:var(--teal);font-weight:700}.tab:hover{color:var(--teal)}
+  .tab-sep{width:1px;background:var(--border);margin:10px 4px}
+  .content{display:none;padding:24px 28px 48px;max-width:1100px;margin:0 auto}.content.active{display:block}
+  .sec-head{font-size:17px;font-weight:800;color:var(--teal-dark);margin:0 0 18px;display:flex;align-items:center;gap:10px}
+  .sec-head::after{content:'';flex:1;height:2px;background:var(--teal-light)}
+  .trip-len-badge{font-size:12px;background:var(--teal-light);color:var(--teal-dark);border-radius:20px;padding:3px 12px;font-weight:600}
+  .note{background:var(--amber-light);border-left:3px solid var(--amber);border-radius:6px;padding:9px 14px;font-size:12px;color:#6B3D00;margin:8px 0;line-height:1.55}
+  .info{background:var(--teal-light);border-left:3px solid var(--teal);border-radius:6px;padding:9px 14px;font-size:12px;color:#064830;margin:8px 0;line-height:1.55}
+  .warn-red{background:var(--red-light);border-left:3px solid var(--red);border-radius:6px;padding:9px 14px;font-size:12px;color:#7a0000;margin:8px 0;line-height:1.55}
+  .tw{overflow-x:auto;margin:4px 0 8px}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{background:var(--teal);color:#fff;padding:7px 11px;text-align:left;font-weight:600}
+  td{padding:7px 11px;border-bottom:1px solid #EEF;vertical-align:top}tr:hover td{background:var(--teal-light)}
+  .t-usd{font-weight:700;color:var(--teal)}.t-twd{font-size:11px;color:var(--secondary)}.t-rec{background:rgba(29,158,117,.07)}
+  .chklist{list-style:none}.chklist li{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid #F2F4F7;font-size:13px}
+  .cb{width:16px;height:16px;border:2px solid var(--teal);border-radius:3px;flex-shrink:0;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+  .cb.done{background:var(--teal)}.cb.done::after{content:'✓';color:white;font-size:10px;font-weight:700}
+  .kpi-bar{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+  .kpi{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:13px 18px;min-width:150px}
+  .kpi.accent{background:var(--teal);color:#fff}
+  .kpi-label{font-size:11px;color:var(--muted);margin-bottom:4px}.kpi.accent .kpi-label{color:rgba(255,255,255,.7)}
+  .kpi-value{font-size:20px;font-weight:800}.kpi.accent .kpi-value{color:#fff}
+  .kpi-sub{font-size:11px;color:var(--secondary);margin-top:2px}.kpi.accent .kpi-sub{color:rgba(255,255,255,.65)}
+  .op-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin:8px 0}
+  .op-card{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--white)}
+  .op-head{background:#F5F8F6;padding:11px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .op-name{font-weight:700;font-size:14px;color:var(--teal-dark)}
+  .op-score{font-size:11px;background:var(--teal);color:#fff;border-radius:4px;padding:1px 7px;font-weight:700;margin-left:6px;white-space:nowrap}
+  .op-price-tag{font-size:11px;color:var(--secondary);text-align:right;flex-shrink:0}
+  .op-body{padding:11px 14px;display:flex;flex-direction:column;gap:8px}
+  .op-pros{background:#EDF7F0;border-left:3px solid #2A8A5E;border-radius:0 5px 5px 0;padding:8px 12px;font-size:12px;color:#1A5438;line-height:1.65}
+  .op-cons{background:#FFF0EE;border-left:4px solid var(--red);border-radius:0 5px 5px 0;padding:8px 12px;font-size:12px;color:#5a0000;line-height:1.65}
+  .op-cons strong{color:var(--red);font-weight:700}
+  .cal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:14px;margin-top:16px}
+  .cal-month{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .cal-mhead{padding:11px 16px 10px;font-weight:800;font-size:15px;color:#fff;display:flex;align-items:center;justify-content:space-between}
+  .cal-mhead .cal-season{font-size:11px;opacity:.8;font-weight:500}
+  .cal-mbody{padding:10px 14px 12px}
+  .cal-entry{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid #F0F2F5;font-size:12px}
+  .cal-entry:last-child{border-bottom:none}
+  .cal-stars{color:#F59E0B;font-size:11px;white-space:nowrap;flex-shrink:0;margin-top:1px;min-width:28px}
+  .cal-dest-name{font-weight:700;color:var(--dark)}
+  .cal-dest-note{color:var(--secondary);font-size:11px}
+  .cal-warn{background:#FFF3CD;border-radius:5px;padding:5px 9px;font-size:11px;color:#7A5500;margin-top:8px;line-height:1.5}
+  .cm-jul{background:linear-gradient(135deg,#0a5240,#0F6E56)}.cm-aug{background:linear-gradient(135deg,#064E3B,#0F9268)}
+  .cm-sep{background:linear-gradient(135deg,#1a4a1a,#2E7D32)}.cm-oct{background:linear-gradient(135deg,#7A3D06,#BA7517)}
+  .cm-nov{background:linear-gradient(135deg,#5a2d00,#A0522D)}.cm-dec{background:linear-gradient(135deg,#1a2e44,#264D7A)}
+  .cm-jan{background:linear-gradient(135deg,#0d2a4a,#1a4a7a)}.cm-feb{background:linear-gradient(135deg,#1A237E,#283593)}
+  .cm-mar{background:linear-gradient(135deg,#3a1a6a,#5E3A87)}.cm-apr{background:linear-gradient(135deg,#0a4a3a,#1D9E75)}
+  .cm-may{background:linear-gradient(135deg,#0a5240,#1D9E75)}.cm-jun{background:linear-gradient(135deg,#085041,#0F6E56)}
+  a{color:var(--teal)}
+
+  /* ── Compact expandable destination cards ── */
+  .dest-card{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden}
+  .dest-card-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .15s}
+  .dest-card-header:hover{background:#F8FBF9}
+  .dc-rank{font-size:11px;font-weight:800;color:#fff;background:var(--teal);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .dc-name{font-size:15px;font-weight:800;color:var(--teal-dark);min-width:140px}
+  .dc-animals{font-size:12px;color:var(--secondary);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dc-badges{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+  .badge{display:inline-block;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600;white-space:nowrap}
+  .badge-cost{background:#F0FAF5;color:var(--teal-dark);border:1px solid #C2E8D5}
+  .badge-time{background:#FFF8E8;color:#7A4A00;border:1px solid #F5DCA0}
+  .badge-level{background:#EEF0F4;color:#334;border:1px solid #CDD0D8}
+  .dc-arrow{font-size:13px;color:var(--muted);flex-shrink:0;transition:transform .2s;margin-left:4px}
+  .dc-arrow.open{transform:rotate(180deg)}
+  .dest-card-detail{display:none;border-top:1px solid var(--border)}
+  .dest-card-detail.open{display:block}
+  .dc-color-bar{height:4px}
+  .color-bar-kerama{background:linear-gradient(90deg,#1A237E,#3949AB)}
+  .color-bar-malapascua{background:linear-gradient(90deg,#7a3d06,#BA7517)}
+  .color-bar-okinawa{background:linear-gradient(90deg,#1B4D1E,#2E7D32)}
+  .color-bar-bohol{background:linear-gradient(90deg,#064E6E,#0A7E7E)}
+  .color-bar-cebu{background:linear-gradient(90deg,#3a1a6a,#5E3A87)}
+  .color-bar-sipadan{background:linear-gradient(90deg,#6B1A3A,#A0295A)}
+  .color-bar-komodo{background:linear-gradient(90deg,#3a1a6a,#5E3A87)}
+  .color-bar-raja{background:linear-gradient(90deg,#064E6E,#0A7E7E)}
+  .color-bar-maldives{background:linear-gradient(90deg,#085041,#1D9E75)}
+  .dc-inner{padding:18px 22px 22px}
+  .dc-inner .s-title{font-size:13px;font-weight:700;color:var(--teal);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin:16px 0 10px}
+  .dc-inner .s-title:first-child{margin-top:0}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+  .tag{display:inline-block;border-radius:20px;padding:3px 11px;font-size:12px;font-weight:500}
+  .tag-green{background:var(--teal-light);color:var(--teal-dark)}.tag-amber{background:var(--amber-light);color:var(--amber)}
+  .tag-gray{background:#EEF0F4;color:#445}.tag-purple{background:var(--purple-light);color:var(--purple)}
+  .tag-wreck{background:#FFF0E8;color:#8B3A0A;border:1px solid #F5CCA0}
+  .kol-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin:8px 0}
+  .kol-card{background:#F8FAFB;border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-decoration:none;color:var(--dark);display:block;transition:all .15s}
+  .kol-card:hover{border-color:var(--teal-mid);background:var(--teal-light)}
+  .kol-card .kc-type{font-size:10px;color:var(--muted);margin-bottom:4px}
+  .kol-card .kc-title{font-size:12px;font-weight:700;color:var(--teal-dark);margin-bottom:4px;line-height:1.4}
+  .kol-card .kc-desc{font-size:11px;color:var(--secondary);line-height:1.45}
+  .cost-row{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--border)}
+  .cost-cell{flex:1;min-width:130px;padding:11px 16px;border-right:1px solid var(--border)}.cost-cell:last-child{border-right:none}
+  .cc-label{font-size:11px;color:var(--muted);margin-bottom:3px}.cc-usd{font-size:16px;font-weight:700;color:var(--teal)}.cc-twd{font-size:11px;color:var(--secondary);margin-top:1px}
+  .rank-order-note{background:#F0FAF5;border:1px solid #C2E8D5;border-radius:8px;padding:8px 14px;font-size:12px;color:var(--teal-dark);margin-bottom:16px}
+
+  @media(max-width:640px){
+    .content{padding:16px}
+    .dc-animals{display:none}
+    .dc-badges{gap:4px}
+    .op-cards{grid-template-columns:1fr}
+    .cal-grid{grid-template-columns:1fr}
+    .cost-row{flex-direction:column}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div><h1>🤿 潛旅資料庫</h1><p>台灣出發 · 翼潛社引薦 · 更新：2026-05-12</p></div>
+  <span class="header-badge">9 目的地 · 短 / 中 / 長程 · 整體評價排序</span>
+</div>
+
+<div class="plan-banner">
+  <div class="pb-item"><div class="pb-label">⭐ 2027 春節計畫 · 每人總費用</div><div class="pb-main">NT$ 126,400 – 132,800</div><div class="pb-sub">USD 3,951–4,151（6人同行·Infinity X·9折）</div></div>
+  <div class="pb-item"><div class="pb-label">船宿（9折）</div><div class="pb-main">NT$ 77,400</div><div class="pb-sub">USD 2,419</div></div>
+  <div class="pb-item"><div class="pb-label">國際機票 TPE→MLE</div><div class="pb-main">NT$ 28.8–35.2K</div><div class="pb-sub">USD 900–1,100</div></div>
+  <div class="pb-item"><div class="pb-label">國內線 + 其他</div><div class="pb-main">NT$ 20,200</div><div class="pb-sub">USD ~632</div></div>
+  <div class="pb-warn">⚠ 2027 艙期待確認<br>聯繫 +60 12-355 2588</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('cal')">🗓 潛水日歷</div>
+  <div class="tab-sep"></div>
+  <div class="tab" onclick="switchTab('plan')">📋 2027 計畫</div>
+  <div class="tab-sep"></div>
+  <div class="tab" onclick="switchTab('short')">🔵 短程</div>
+  <div class="tab" onclick="switchTab('mid')">🟡 中程</div>
+  <div class="tab" onclick="switchTab('long')">🔴 長程</div>
+</div>
+
+<!-- ═══ TAB: 潛水日歷 ═══ -->
+<div id="tab-cal" class="content active">
+  <div class="sec-head">🗓 亞洲 + 大洋洲潛水月曆 <span class="trip-len-badge">7月→6月 · 每月最佳去處</span></div>
+  <div class="info">📍 以台灣出發為基準。★★★ 年度最佳窗口 · ★★ 良好 · ★ 可去但非旺季。橘色警示代表配額限制或封閉。</div>
+  <div class="cal-grid">
+    <div class="cal-month"><div class="cal-mhead cm-jul"><span>7 月 July</span><span class="cal-season">夏季</span></div><div class="cal-mbody">
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇮🇩 印尼科莫多</div><div class="cal-dest-note">北/中部最佳能見度 · Manta 幾乎必見</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇲🇾 斯巴丹 Sipadan</div><div class="cal-dest-note">旺季中段，能見度佳，梭魚龍捲風</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇵🇭 媽媽島 Malapascua</div><div class="cal-dest-note">鐮狀真鯊全年穩定，注意颱風</div></div></div>
+    </div></div>
+    <div class="cal-month"><div class="cal-mhead cm-aug"><span>8 月 August</span><span class="cal-season">夏季巔峰</span></div><div class="cal-mbody">
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇮🇩 印尼科莫多</div><div class="cal-dest-note">全年最佳月份 · Manta + 鯊魚群</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇲🇾 斯巴丹 Sipadan</div><div class="cal-dest-note">旺季最佳 · 能見度頂尖</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇯🇵 慶良間諸島</div><div class="cal-dest-note">夏季珊瑚豐盛，海龜保證遇見</div></div></div>
+    </div></div>
+    <div class="cal-month"><div class="cal-mhead cm-sep"><span>9 月 September</span><span class="cal-season">夏末轉秋</span></div><div class="cal-mbody">
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇮🇩 印尼科莫多</div><div class="cal-dest-note">持續旺季，略增南部風浪</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇲🇾 斯巴丹 Sipadan</div><div class="cal-dest-note">旺季末段，仍屬佳期</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇵🇭 媽媽島 Malapascua</div><div class="cal-dest-note">鐮狀真鯊全年 · 颱風季注意海況</div></div></div>
+    </div></div>
+    <div class="cal-month"><div class="cal-mhead cm-oct"><span>10 月 October</span><span class="cal-season">轉換月</span></div><div class="cal-mbody">
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇲🇾 斯巴丹 Sipadan</div><div class="cal-dest-note">10月配額鬆動，此時絕佳</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇮🇩 四王島 Raja Ampat</div><div class="cal-dest-note">10月開季！Manta + 鯊群啟動</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇵🇭 媽媽島 Malapascua</div><div class="cal-dest-note">11–5月最佳季節開始</div></div></div>
+    </div></div>
+    <div class="cal-month"><div class="cal-mhead cm-nov"><span>11 月 November</span><span class="cal-season">旱季開始</span></div><div class="cal-mbody">
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇮🇩 四王島 Raja Ampat</div><div class="cal-dest-note">旺季高峰，Manta + 鯊魚群</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇵🇭 媽媽島 Malapascua</div><div class="cal-dest-note">旱季最佳窗口，能見度頂尖</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇵🇭 薄荷島 Bohol</div><div class="cal-dest-note">旱季 Balicasag 牆潛 + 梭魚群</div></div></div>
+      <div class="cal-warn">⚠️ 斯巴丹 2026年11月<strong>全月封閉</strong></div>
+    </div></div>
+    <div class="cal-month"><div class="cal-mhead cm-dec"><span>12 月 December</span><span class="cal-season">冬季旺季開啟</span></div><div class="cal-mbody">
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇮🇩 四王島 Raja Ampat</div><div class="cal-dest-note">旺季旺季！Manta + 珊瑚頂尖</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇲🇻 馬代深南線</div><div class="cal-dest-note">12月開季！虎鯊 + Fuvahmulah 啟動</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇵🇭 媽媽島 Malapascua</div><div class="cal-dest-note">鐮狀真鯊最穩定季</div></div></div>
+    </div></div>
+    <div class="cal-month"><div class="cal-mhead cm-jan"><span>1 月 January</span><span class="cal-season">冬季頂峰</span></div><div class="cal-mbody">
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇲🇻 馬代深南線</div><div class="cal-dest-note">虎鯊密集 · 錘頭鯊 · 大洋 Manta</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇮🇩 四王島 Raja Ampat</div><div class="cal-dest-note">持續頂尖旺季</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇯🇵 慶良間諸島</div><div class="cal-dest-note">大翅鯨開始（1月中–3月末）水中聽鯨鳴</div></div></div>
+    </div></div>
+    <div class="cal-month"><div class="cal-mhead cm-feb"><span>2 月 February</span><span class="cal-season">🧧 春節黃金月</span></div><div class="cal-mbody">
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇲🇻 馬代深南線 🧧</div><div class="cal-dest-note">春節首選！虎鯊+錘頭+大洋Manta全中</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇮🇩 四王島 Raja Ampat 🧧</div><div class="cal-dest-note">Manta旺季頂峰，春節9D8N完美配合</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇯🇵 慶良間 大翅鯨</div><div class="cal-dest-note">2月頂峰，Humpback Whale 最活躍</div></div></div>
+    </div></div>
+    <div class="cal-month"><div class="cal-mhead cm-mar"><span>3 月 March</span><span class="cal-season">春季轉換</span></div><div class="cal-mbody">
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇲🇻 馬代深南線</div><div class="cal-dest-note">3月末閉季，把握最後機會</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇯🇵 慶良間 大翅鯨</div><div class="cal-dest-note">3月末結束，最後機會</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇵🇭 媽媽島 / 薄荷島</div><div class="cal-dest-note">旱季末，海況仍佳</div></div></div>
+    </div></div>
+    <div class="cal-month"><div class="cal-mhead cm-apr"><span>4 月 April</span><span class="cal-season">東南亞開季</span></div><div class="cal-mbody">
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇲🇾 斯巴丹 Sipadan</div><div class="cal-dest-note">重新開放！旺季啟動，能見度頂尖</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇮🇩 印尼科莫多</div><div class="cal-dest-note">4月開季！配額重置，早訂早到</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇯🇵 沖繩 / 慶良間</div><div class="cal-dest-note">春季水溫回暖，珊瑚復甦</div></div></div>
+    </div></div>
+    <div class="cal-month"><div class="cal-mhead cm-may"><span>5 月 May</span><span class="cal-season">旺季全開</span></div><div class="cal-mbody">
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇮🇩 印尼科莫多</div><div class="cal-dest-note">進入最佳期 · Manta + 珊瑚 + 鯊魚</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇲🇾 斯巴丹 Sipadan</div><div class="cal-dest-note">旺季高峰！2026起可潛3次/天</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇵🇭 媽媽島 Malapascua</div><div class="cal-dest-note">鐮狀真鯊 + 旱季最佳期</div></div></div>
+    </div></div>
+    <div class="cal-month"><div class="cal-mhead cm-jun"><span>6 月 June</span><span class="cal-season">夏季再開</span></div><div class="cal-mbody">
+      <div class="cal-entry"><div class="cal-stars">★★★</div><div><div class="cal-dest-name">🇮🇩 印尼科莫多</div><div class="cal-dest-note">夏季最旺，Manta穩定，鯊魚群</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇲🇾 斯巴丹 Sipadan</div><div class="cal-dest-note">旺季持續，梭魚 + 海龜</div></div></div>
+      <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇯🇵 沖繩 / 慶良間</div><div class="cal-dest-note">夏季入場，珊瑚豐盛期開始</div></div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══ TAB: 2027 計畫 ═══ -->
+<div id="tab-plan" class="content">
+  <div class="kpi-bar">
+    <div class="kpi"><div class="kpi-label">船宿費 / 人（9折）</div><div class="kpi-value">NT$77,400</div><div class="kpi-sub">USD 2,419 · Infinity X Superior</div></div>
+    <div class="kpi"><div class="kpi-label">國際機票 / 人（估）</div><div class="kpi-value">NT$28.8–35.2K</div><div class="kpi-sub">USD 900–1,100</div></div>
+    <div class="kpi"><div class="kpi-label">國內線 MLE⇄GAN</div><div class="kpi-value">NT$11,600</div><div class="kpi-sub">USD 362</div></div>
+    <div class="kpi"><div class="kpi-label">住宿 / 小費 / 保險</div><div class="kpi-value">NT$8,600</div><div class="kpi-sub">USD 270</div></div>
+    <div class="kpi accent"><div class="kpi-label">每人合計</div><div class="kpi-value">NT$126–133K</div><div class="kpi-sub">USD 3,951–4,151</div></div>
+  </div>
+  <div class="note">⚠️ <strong>Prestige Scuba 目前僅公告 2026 年艙期。</strong>2027 年艙期尚未公告，請立即聯繫：WhatsApp <strong>+60 12-355 2588</strong> / info@prestigescuba.com</div>
+  <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px">
+    <div style="background:linear-gradient(135deg,var(--teal-dark),var(--teal-mid));color:#fff;padding:16px 22px;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+      <div><div style="font-size:18px;font-weight:800">🇲🇻 馬爾地夫深南線 · Infinity X</div><div style="font-size:12px;opacity:.75">2027 年 2 月 6 日（六）– 2 月 13 日（五）· 8天7夜 · 6人成行</div></div>
+      <div style="margin-left:auto;text-align:right"><div style="font-size:10px;opacity:.65;text-transform:uppercase">每人總費用</div><div style="font-size:28px;font-weight:900">USD 3,951–4,151</div><div style="font-size:13px;opacity:.75">NT$ 126,400–132,800</div></div>
+    </div>
+    <div class="cost-row">
+      <div class="cost-cell"><div class="cc-label">🚢 船宿（9折）</div><div class="cc-usd">USD 2,419</div><div class="cc-twd">NT$ 77,400</div></div>
+      <div class="cost-cell"><div class="cc-label">✈ 國際機票 TPE→MLE</div><div class="cc-usd">USD 900–1,100</div><div class="cc-twd">NT$ 28,800–35,200</div></div>
+      <div class="cost-cell"><div class="cc-label">🛫 國內線 MLE⇄GAN</div><div class="cc-usd">USD 362</div><div class="cc-twd">NT$ 11,600</div></div>
+      <div class="cost-cell"><div class="cc-label">📦 住宿 / 小費 / 保險</div><div class="cc-usd">USD ~270</div><div class="cc-twd">NT$ 8,600</div></div>
+    </div>
+    <div style="padding:16px 22px 20px">
+      <div style="font-size:13px;font-weight:700;color:var(--teal);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin-bottom:10px">行程日程</div>
+      <div class="tw"><table>
+        <tr><th>日期</th><th>地點</th><th>活動</th></tr>
+        <tr><td>2/5（五）</td><td>台北 TPE 出發</td><td>建議提前 1 天至 MLE 緩衝</td></tr>
+        <tr><td>2/6（六）D1</td><td>MLE → GAN 登船</td><td>Maldivian 國內線（1h35m）· 安全簡報</td></tr>
+        <tr><td>2/7–2/9</td><td>Fuvahmulah + Huvadhu</td><td>🐯 虎鯊 · 🦈 鐮狀真鯊 · 錘頭鯊</td></tr>
+        <tr><td>2/10–2/11</td><td>Addu Atoll</td><td>🦋 Maa Kandu Manta · ⚓ HMS British Loyalty 沉船</td></tr>
+        <tr><td>2/12（五）</td><td>返航 GAN</td><td>最後早潛 · 送別晚宴</td></tr>
+        <tr><td>2/13（六）</td><td>GAN → 返台</td><td>下船 · 搭國際線回台</td></tr>
+      </table></div>
+      <div style="font-size:13px;font-weight:700;color:var(--teal);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin:16px 0 10px">行動清單</div>
+      <ul class="chklist">
+        <li><div class="cb" onclick="tog(this)"></div><span>聯繫 Prestige Scuba 確認 2027 年 2 月艙期（WhatsApp +60 12-355 2588）</span></li>
+        <li><div class="cb" onclick="tog(this)"></div><span>確認 6 人名單（需 AOW + 100 潛）</span></li>
+        <li><div class="cb" onclick="tog(this)"></div><span>繳定金並確認退款條款</span></li>
+        <li><div class="cb" onclick="tog(this)"></div><span>訂 MLE ↔ GAN 國內線（maldivian.aero）</span></li>
+        <li><div class="cb" onclick="tog(this)"></div><span>設 Google Flights 價格提醒（TPE → MLE）</span></li>
+        <li><div class="cb" onclick="tog(this)"></div><span>購買潛水保險（DAN 或同等）</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB: 短程 ═══ -->
+<div id="tab-short" class="content">
+  <div class="sec-head">🔵 短程目的地 <span class="trip-len-badge">3–7 天 · 預算 NT$1.3–4.5 萬</span></div>
+  <div class="rank-order-note">📊 以下按<strong>整體潛水品質排序</strong>（參考 KOL 評測 · UNESCO / PADI · DivingSquad · ScubaBoard）。點擊任一卡片展開完整資訊。</div>
+
+  <!-- #1 慶良間 -->
+  <div class="dest-card">
+    <div class="dc-color-bar color-bar-kerama"></div>
+    <div class="dest-card-header" onclick="toggleCard('kerama')">
+      <div class="dc-rank">1</div>
+      <div><div class="dc-name">🇯🇵 慶良間諸島</div><div class="dc-animals">🐋 大翅鯨（水中鯨鳴） · 🐢 海龜 · 💎 慶良間藍 30m+</div></div>
+      <div class="dc-badges">
+        <span class="badge badge-cost">NT$1.7–2.9萬</span>
+        <span class="badge badge-time">最佳：1–3月（鯨）/ 4–9月</span>
+        <span class="badge badge-level">OW</span>
+      </div>
+      <div class="dc-arrow" id="arrow-kerama">▼</div>
+    </div>
+    <div class="dest-card-detail" id="detail-kerama">
+      <div class="dc-inner">
+        <div class="s-title">費用明細（4D3N）</div>
+        <div class="cost-row">
+          <div class="cost-cell"><div class="cc-label">✈ 機票 TPE→OKA</div><div class="cc-usd">NT$6,000–15,000</div></div>
+          <div class="cost-cell"><div class="cc-label">⛴ 快船 那霸→座間味（來回）</div><div class="cc-usd">NT$2,200</div></div>
+          <div class="cost-cell"><div class="cc-label">🏨 住宿 3晚</div><div class="cc-usd">NT$2,700–6,400</div></div>
+          <div class="cost-cell"><div class="cc-label">🤿 Fun Dive 2天</div><div class="cc-usd">NT$4,200</div></div>
+        </div>
+        <div class="s-title">為什麼排第一？</div>
+        <div class="tags">
+          <span class="tag tag-green">🐋 全球稀有！水中可聽大翅鯨鳴叫（1–3月）</span>
+          <span class="tag tag-green">💎 「慶良間藍」30m+ 能見度，UNESCO 候選自然遺產</span>
+          <span class="tag tag-green">🐢 海龜（Zamami 幾乎保證遇見）</span>
+          <span class="tag tag-gray">🪸 200+ 種珊瑚，比沖繩本島更原始</span>
+        </div>
+        <div class="s-title">🏪 潛店評比</div>
+        <div class="op-cards">
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">カイトマリンスポーツ（座間味）</span></div><div class="op-price-tag">Fun Dive 2潛 ¥13,200<br>冬季器材半價</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 座間味在地老店 40 年；含大翅鯨觀賞（1–3月）；導潛對潛點瞭若指掌</div>
+              <div class="op-cons"><strong>❌ 差評</strong><br>網站主要為日文，需翻譯工具；旺季需 3 個月前預訂</div>
+            </div>
+          </div>
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Peace Dive Shop（座間味）</span></div><div class="op-price-tag">含鯨魚觀賞行程</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 冬季特色行程結合大翅鯨觀賞 + 潛水；TripAdvisor「工作人員有序，態度極佳」</div>
+              <div class="op-cons"><strong>❌ 差評</strong><br>需日語溝通；冬季 19–21°C，5mm 防寒衣必備；鯨魚隨機性，未見時費用部分退還</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-title">📖 KOL 攻略</div>
+        <div class="kol-grid">
+          <a class="kol-card" href="https://visitokinawajapan.com/discover/dive-sites-okinawa/kerama-islands-diving/" target="_blank"><div class="kc-type">🏛 官方 · Visit Okinawa</div><div class="kc-title">Kerama Islands Diving – 官方潛水指南</div><div class="kc-desc">慶良間官方介紹，含潛點 + 大翅鯨觀賞資訊</div></a>
+          <a class="kol-card" href="https://www.tripadvisor.com/Attraction_Review-g1121615-d3342926-Reviews-Zamamison_Whale_Watching_Association" target="_blank"><div class="kc-type">⭐ TripAdvisor</div><div class="kc-title">座間味大翅鯨觀賞真實評論</div><div class="kc-desc">旅客真實反饋，評分 4.5/5</div></a>
+        </div>
+        <div class="note">⚠️ 颱風季（8–10月）快船可能停航；冬季 5mm 防寒衣必備；島上 ATM 少，備足日幣現金</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- #2 媽媽島 -->
+  <div class="dest-card">
+    <div class="dc-color-bar color-bar-malapascua"></div>
+    <div class="dest-card-header" onclick="toggleCard('malapascua')">
+      <div class="dc-rank">2</div>
+      <div><div class="dc-name">🇵🇭 媽媽島 Malapascua</div><div class="dc-animals">🦈 鐮狀真鯊（全球唯一每天穩定可見） · 🦈 白尖鯊 · 🐍 海蛇</div></div>
+      <div class="dc-badges">
+        <span class="badge badge-cost">NT$1.8–2.7萬</span>
+        <span class="badge badge-time">最佳：1–5月 / 全年可</span>
+        <span class="badge badge-level">OW</span>
+      </div>
+      <div class="dc-arrow" id="arrow-malapascua">▼</div>
+    </div>
+    <div class="dest-card-detail" id="detail-malapascua">
+      <div class="dc-inner">
+        <div class="s-title">費用明細（5D4N）</div>
+        <div class="cost-row">
+          <div class="cost-cell"><div class="cc-label">✈ 機票 TPE→MNL→CEB</div><div class="cc-usd">NT$8,000–12,000</div></div>
+          <div class="cost-cell"><div class="cc-label">⛴ Maya港→媽媽島 快艇</div><div class="cc-usd">NT$320–480</div></div>
+          <div class="cost-cell"><div class="cc-label">🏨 住宿 3–4晚（含早）</div><div class="cc-usd">NT$3,840–6,400</div></div>
+          <div class="cost-cell"><div class="cc-label">🤿 Fun Dives 3天</div><div class="cc-usd">NT$4,640–7,040</div></div>
+        </div>
+        <div class="s-title">為什麼排第二？</div>
+        <div class="tags">
+          <span class="tag tag-amber">🦈 Kimud Shoal — 全球唯一每天可穩定見鐮狀真鯊，無須餵食</span>
+          <span class="tag tag-amber">🌅 清晨 5:30–7:00 清潔站，凌晨起床值回票價</span>
+          <span class="tag tag-green">🦈 Gato Island 夜潛白尖鯊群 + 海蛇洞窟</span>
+        </div>
+        <div class="info">全球只有在這裡，不論何時到訪，每天早晨幾乎都可以看見鐮狀真鯊。這是地球上獨一無二的體驗。</div>
+        <div class="s-title">🏪 潛店評比</div>
+        <div class="op-cards">
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Evolution Diving Resort</span><span class="op-score">⭐ 9.4/10</span></div><div class="op-price-tag">Fun Dive ~PHP 1,800<br>≈ NT$1,050/潛</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 媽媽島最知名；TripAdvisor 長期領先；最大 4:1 導潛比；鐮狀真鯊機率極高；英文服務</div>
+              <div class="op-cons"><strong>❌ 差評（2025 ScubaBoard）</strong><br><strong>員工曾在唱卡拉 OK 時讓客人等待到歌唱完才接待</strong>；高峰期房間略遜官網照片</div>
+            </div>
+          </div>
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Thresher Shark Divers</span></div><div class="op-price-tag">平價替代</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 價格較 Evolution 低；專注鐮狀真鯊</div>
+              <div class="op-cons"><strong>❌</strong> 規模小，住宿需外求；英文稍弱</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-title">📖 KOL 攻略</div>
+        <div class="kol-grid">
+          <a class="kol-card" href="https://girlonazebra.com/diving-in-malapascua/" target="_blank"><div class="kc-type">📝 部落格 · 2026</div><div class="kc-title">Diving in Malapascua: Thresher Sharks</div><div class="kc-desc">2026年最新攻略，含 Evolution 詳評與鐮狀真鯊見到率分析</div></a>
+          <a class="kol-card" href="https://scubaboard.com/community/threads/evolution-malapascua-29-30-june-2025.661321/" target="_blank"><div class="kc-type">💬 ScubaBoard · Jun 2025</div><div class="kc-title">Evolution Diving 真實行程報告</div><div class="kc-desc">含正負面評價，適合做決策參考</div></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- #3 沖繩本島 -->
+  <div class="dest-card">
+    <div class="dc-color-bar color-bar-okinawa"></div>
+    <div class="dest-card-header" onclick="toggleCard('okinawa')">
+      <div class="dc-rank">3</div>
+      <div><div class="dc-name">🇯🇵 沖繩本島</div><div class="dc-animals">💙 青之洞窟 · 🐢 海龜 · ✈️ F4U 沉機</div></div>
+      <div class="dc-badges">
+        <span class="badge badge-cost">NT$1.3–3.2萬</span>
+        <span class="badge badge-time">最佳：4–9月 / 全年可</span>
+        <span class="badge badge-level">OW / 體驗潛</span>
+      </div>
+      <div class="dc-arrow" id="arrow-okinawa">▼</div>
+    </div>
+    <div class="dest-card-detail" id="detail-okinawa">
+      <div class="dc-inner">
+        <div class="s-title">費用明細（4D3N）</div>
+        <div class="cost-row">
+          <div class="cost-cell"><div class="cc-label">✈ 機票 TPE→OKA（直飛 1.5h）</div><div class="cc-usd">NT$6,000–15,000</div></div>
+          <div class="cost-cell"><div class="cc-label">🏨 住宿 3晚（恩納村）</div><div class="cc-usd">NT$3,000–9,600</div></div>
+          <div class="cost-cell"><div class="cc-label">🤿 潛水 2天 3潛</div><div class="cc-usd">NT$4,000–7,000</div></div>
+          <div class="cost-cell"><div class="cc-label">🍽 餐食交通</div><div class="cc-usd">NT$3,500–6,000</div></div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-green">💙 青之洞窟 Blue Cave — 全球最美洞窟光影奇景</span>
+          <span class="tag tag-green">✈️ 直飛 1.5h，零時差，最容易到達</span>
+          <span class="tag tag-wreck">✈️ 砂辺 F4U 二戰飛機殘骸（珊瑚覆蓋美麗）</span>
+          <span class="tag tag-gray">宮古島（另搭飛機）能見度 40m+，洞窟系統頂尖</span>
+        </div>
+        <div class="s-title">🏪 潛店評比</div>
+        <div class="op-cards">
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Natural Blue</span><span class="op-score">⭐ Google #1</span></div><div class="op-price-tag">Fun Dive ~¥20,000–25,000</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 唯一「Blue Cave 認定 Expert Shop」；全英文；每梯限 2 組；GoPro 拍攝；台灣 KOL 指名</div>
+              <div class="op-cons"><strong>❌</strong> 主要為觀光體驗，大物刺激度不足；旺季需提前 2–4 週預約</div>
+            </div>
+          </div>
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">ダイビングショップ 和（Nagomi）</span><span class="op-score">2025 Google #1</span></div><div class="op-price-tag">含早鳥折扣</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 評論數沖繩最多；高評分；提供早鳥折扣</div>
+              <div class="op-cons"><strong>❌</strong> 以青之洞窟為主；進階規劃較少</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-title">📖 KOL 攻略</div>
+        <div class="kol-grid">
+          <a class="kol-card" href="https://visitokinawajapan.com/discover/dive-sites-okinawa/" target="_blank"><div class="kc-type">🏛 官方</div><div class="kc-title">Visit Okinawa 官方潛點指南</div><div class="kc-desc">沖繩潛水官方資訊總匯</div></a>
+          <a class="kol-card" href="https://en.activityjapan.com/feature/okinawa_divingshop_recommended/" target="_blank"><div class="kc-type">📊 排行</div><div class="kc-title">ActivityJapan 沖繩潛店推薦排行</div><div class="kc-desc">依評分、外語服務綜合推薦</div></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- #4 薄荷島 -->
+  <div class="dest-card">
+    <div class="dc-color-bar color-bar-bohol"></div>
+    <div class="dest-card-header" onclick="toggleCard('bohol')">
+      <div class="dc-rank">4</div>
+      <div><div class="dc-name">🇵🇭 薄荷島 Bohol</div><div class="dc-animals">🐢 海龜龍捲風 · 🐟 梭魚群 · 🏔 牆潛 Balicasag</div></div>
+      <div class="dc-badges">
+        <span class="badge badge-cost">NT$2.2–3.2萬</span>
+        <span class="badge badge-time">最佳：3–6月</span>
+        <span class="badge badge-level">OW</span>
+      </div>
+      <div class="dc-arrow" id="arrow-bohol">▼</div>
+    </div>
+    <div class="dest-card-detail" id="detail-bohol">
+      <div class="dc-inner">
+        <div class="s-title">費用明細（5D4N）</div>
+        <div class="cost-row">
+          <div class="cost-cell"><div class="cc-label">✈ 機票 TPE→CEB</div><div class="cc-usd">NT$8,000–12,000</div></div>
+          <div class="cost-cell"><div class="cc-label">⛴ CEB→薄荷（快船）</div><div class="cc-usd">NT$480–2,560</div></div>
+          <div class="cost-cell"><div class="cc-label">🏨 Mario Dive Resort 3–4晚</div><div class="cc-usd">NT$2,976–4,160/晚</div></div>
+          <div class="cost-cell"><div class="cc-label">🤿 Fun Dives 3天</div><div class="cc-usd">NT$3,200–4,640</div></div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-green">🐢 Balicasag Island 海龜龍捲風（幾乎必見）</span>
+          <span class="tag tag-green">🐟 梭魚群 Barracuda School</span>
+          <span class="tag tag-gray">適合帶家人或非潛水伴侶（眼鏡猴 + 巧克力山）</span>
+        </div>
+        <div class="s-title">🏪 潛店評比</div>
+        <div class="op-cards">
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Mario Dive Resort</span><span class="op-score">⭐ 9.2/10</span></div><div class="op-price-tag">住宿 $93–130/晚<br>Fun Dive ~PHP 1,200–1,800</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ Booking.com 9.2/10；「老闆 Mario 和 Anne 超親切」；WhatsApp 當天回；大泳池；PADI 5*；老店口碑穩定</div>
+              <div class="op-cons"><strong>❌</strong> 位於 Panglao 而非 Balicasag，前往核心潛點需搭船 30–40 分鐘；房間設施較基本</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-title">📖 KOL 攻略</div>
+        <div class="kol-grid">
+          <a class="kol-card" href="https://justynjen.com/ultimate-diving-guide-to-panglao-philippines/" target="_blank"><div class="kc-type">📝 部落格</div><div class="kc-title">Ultimate Diving Guide to Panglao</div><div class="kc-desc">薄荷島 Panglao 完整潛水指南，含 Balicasag + Mario Dive 評價</div></a>
+        </div>
+        <div class="note">💡 薄荷島陸上也有眼鏡猴保育區和巧克力山，適合帶家人同行。旺季（12–2月）Alona 海灘擁擠，提前訂房。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- #5 宿霧 -->
+  <div class="dest-card">
+    <div class="dc-color-bar color-bar-cebu"></div>
+    <div class="dest-card-header" onclick="toggleCard('cebu')">
+      <div class="dc-rank">5</div>
+      <div><div class="dc-name">🇵🇭 宿霧 Cebu（多點串聯）</div><div class="dc-animals">🐟 沙丁魚暴風雲（岸潛）· 🦈 鐮狀真鯊 · 🐋 鯨鯊浮潛</div></div>
+      <div class="dc-badges">
+        <span class="badge badge-cost">NT$1.8–3.6萬</span>
+        <span class="badge badge-time">最佳：1–5月</span>
+        <span class="badge badge-level">OW</span>
+      </div>
+      <div class="dc-arrow" id="arrow-cebu">▼</div>
+    </div>
+    <div class="dest-card-detail" id="detail-cebu">
+      <div class="dc-inner">
+        <div class="s-title">費用明細（5D4N）</div>
+        <div class="cost-row">
+          <div class="cost-cell"><div class="cc-label">✈ 機票 TPE→CEB</div><div class="cc-usd">NT$8,000–12,000</div></div>
+          <div class="cost-cell"><div class="cc-label">🏨 住宿 4晚</div><div class="cc-usd">NT$3,200–8,000</div></div>
+          <div class="cost-cell"><div class="cc-label">🤿 Fun Dives 3天</div><div class="cc-usd">NT$4,800–9,600</div></div>
+          <div class="cost-cell"><div class="cc-label">🚌 陸路交通</div><div class="cc-usd">NT$600–1,600</div></div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-purple">🐟 Moalboal 沙丁魚暴風雲 — 岸潛即可，全球奇觀</span>
+          <span class="tag tag-amber">🦈 媽媽島鐮狀真鯊（3–4h 車程 + 快艇）</span>
+          <span class="tag tag-green">🐋 Donsol 鯨鯊浮潛（11月–5月，需另安排南部）</span>
+        </div>
+        <div class="info">宿霧是菲律賓潛水跳板，一趟旅行可串聯 Moalboal（沙丁魚）+ 媽媽島（鐮狀真鯊）兩個世界級體驗。</div>
+        <div class="s-title">🏪 潛店評比</div>
+        <div class="op-cards">
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Savedra Dive Center（Moalboal）</span></div><div class="op-price-tag">沙丁魚牆岸潛</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ Moalboal 最知名潛店；沙丁魚牆岸潛方便</div>
+              <div class="op-cons"><strong>❌</strong> 旺季人潮多，分組等待</div>
+            </div>
+          </div>
+        </div>
+        <div class="note">媽媽島（Evolution Diving）詳細評比見短程第 2 名卡片。Donsol 鯨鯊需從宿霧南下 4–5h 另排路線。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB: 中程 ═══ -->
+<div id="tab-mid" class="content">
+  <div class="sec-head">🟡 中程目的地 <span class="trip-len-badge">5–8 天 · 預算 NT$2.5–10 萬</span></div>
+  <div class="rank-order-note">📊 以下按<strong>整體潛水品質排序</strong>（斯巴丹 — Jacques Cousteau 認可亞洲 #1；科莫多 — UNESCO 世界自然遺產）</div>
+
+  <!-- #1 斯巴丹 -->
+  <div class="dest-card">
+    <div class="dc-color-bar color-bar-sipadan"></div>
+    <div class="dest-card-header" onclick="toggleCard('sipadan')">
+      <div class="dc-rank">1</div>
+      <div><div class="dc-name">🇲🇾 斯巴丹 Sipadan</div><div class="dc-animals">🐟 梭魚龍捲風 · 🐢 海龜塞車 · 🦈 錘頭鯊 · 垂直牆潛</div></div>
+      <div class="dc-badges">
+        <span class="badge badge-cost">NT$2.6–5.0萬</span>
+        <span class="badge badge-time">最佳：4–10月 ⚠️ 11月封閉</span>
+        <span class="badge badge-level">AOW 必須</span>
+      </div>
+      <div class="dc-arrow" id="arrow-sipadan">▼</div>
+    </div>
+    <div class="dest-card-detail" id="detail-sipadan">
+      <div class="dc-inner">
+        <div class="s-title">費用明細（5D4N）</div>
+        <div class="cost-row">
+          <div class="cost-cell"><div class="cc-label">✈ 機票 TPE→KK→Semporna</div><div class="cc-usd">NT$11,200–17,600</div></div>
+          <div class="cost-cell"><div class="cc-label">🏝 Sipadan 許可證（1天）</div><div class="cc-usd">NT$3,100（RM 450）</div></div>
+          <div class="cost-cell"><div class="cc-label">🏨 Mabul 住宿 4晚（含餐）</div><div class="cc-usd">NT$6,400–12,800</div></div>
+          <div class="cost-cell"><div class="cc-label">🤿 潛水套餐</div><div class="cc-usd">NT$11,200–14,400</div></div>
+        </div>
+        <div class="s-title">為什麼排第一？</div>
+        <div class="tags">
+          <span class="tag tag-green">🐟 梭魚龍捲風 Barracuda Tornado — 全球最壯觀群潛奇景</span>
+          <span class="tag tag-green">🐢 海龜塞車（Turtle Patch，Drop Off）— 密度全球最高</span>
+          <span class="tag tag-green">🌊 垂直牆潛 Drop Off — 火山島形成的壯觀深淵</span>
+          <span class="tag tag-amber">Jacques Cousteau 曾稱：「近乎未受觸及的珍珠」</span>
+        </div>
+        <div class="warn-red">⚠️ <strong>AOW 為硬性要求</strong>；<strong>2026年11月全月封閉</strong>；配額半年前可能售罄</div>
+        <div class="info">🆕 <strong>2026年5月起新規：每人每天可潛 3 次</strong>（原限 2 次），Scuba Junkie 率先公告。</div>
+        <div class="s-title">🏪 潛店評比</div>
+        <div class="op-cards">
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Scuba Junkie Sipadan</span><span class="op-score">⭐ 業界龍頭</span></div><div class="op-price-tag">3D/2N 基礎套餐<br><a href="https://www.scuba-junkie.com">scuba-junkie.com</a></div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ TripAdvisor 高分穩定；3D/2N 套餐保證 1 天 Sipadan 配額；環保嚴格；2026 起 3 潛/天</div>
+              <div class="op-cons"><strong>❌</strong> 需至少 3 天才得 1 天 Sipadan；<strong>2025 某評論指特定講師態度惡劣、懶散</strong>（個案）</div>
+            </div>
+          </div>
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Seaventures Dive Rig</span></div><div class="op-price-tag">唯一鑽油台住宿</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 全球唯一鑽油台改建；24h 自由夜潛；距 Sipadan 最近</div>
+              <div class="op-cons"><strong>❌ 多項投訴</strong><br><strong>房間清潔差（灰塵、頭髮）；A/C 夜間失效；食物單調（反覆 Nasi Goreng）；網路颳風即斷</strong></div>
+            </div>
+          </div>
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Celebes Explorer 9（船宿）</span></div><div class="op-price-tag">Sipadan 唯一船宿<br>10配額/天</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ Sipadan 周邊唯一船宿；每天 10 個配額；選點靈活</div>
+              <div class="op-cons"><strong>❌</strong> 價格偏高；部分評論指船艙擁擠</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-title">📖 KOL 攻略</div>
+        <div class="kol-grid">
+          <a class="kol-card" href="https://www.scuba-junkie.com/sipadan-diving-update-2026/" target="_blank"><div class="kc-type">📢 官方公告</div><div class="kc-title">Sipadan 2026 每天 3 潛新規說明</div><div class="kc-desc">Scuba Junkie 官方說明 2026 更新</div></a>
+          <a class="kol-card" href="https://dorisgonediving.com/diving-sipadan-on-a-budget/" target="_blank"><div class="kc-type">📝 部落格</div><div class="kc-title">Diving Sipadan on a Budget</div><div class="kc-desc">預算攻略，各業者配額獲取方式比較</div></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- #2 科莫多 -->
+  <div class="dest-card">
+    <div class="dc-color-bar color-bar-komodo"></div>
+    <div class="dest-card-header" onclick="toggleCard('komodo')">
+      <div class="dc-rank">2</div>
+      <div><div class="dc-name">🇮🇩 科莫多 Komodo</div><div class="dc-animals">🦋 Manta Ray · 🦈 灰礁鯊群 · 🐟 Batu Bolong 珊瑚地毯</div></div>
+      <div class="dc-badges">
+        <span class="badge badge-cost">NT$5.3–12.0萬</span>
+        <span class="badge badge-time">最佳：5–9月</span>
+        <span class="badge badge-level">OW（Castle Rock 建議 AOW）</span>
+      </div>
+      <div class="dc-arrow" id="arrow-komodo">▼</div>
+    </div>
+    <div class="dest-card-detail" id="detail-komodo">
+      <div class="dc-inner">
+        <div class="s-title">費用明細（7D6N 中端）</div>
+        <div class="cost-row">
+          <div class="cost-cell"><div class="cc-label">✈ 機票 TPE→DPS→LBJ</div><div class="cc-usd">NT$12,000–18,000</div></div>
+          <div class="cost-cell"><div class="cc-label">🚢 船宿（7D6N 中端）</div><div class="cc-usd">NT$52,700（Sea Dragon $1,646）</div></div>
+          <div class="cost-cell"><div class="cc-label">🏝 公園入場費</div><div class="cc-usd">NT$800–960/天</div></div>
+          <div class="cost-cell"><div class="cc-label">🍽 小費 / 雜費</div><div class="cc-usd">NT$1,400–2,200</div></div>
+        </div>
+        <div class="s-title">為什麼排第二？</div>
+        <div class="tags">
+          <span class="tag tag-purple">🦋 Manta Point — 清潔站幾乎每潛必見，世界頂尖</span>
+          <span class="tag tag-purple">💎 UNESCO 世界自然遺產 · 科莫多巨龍</span>
+          <span class="tag tag-green">🦈 Castle Rock 強流灰礁鯊群 — 全球最壯觀鯊魚場景之一</span>
+        </div>
+        <div class="warn-red">⚠️ <strong>2026年4月起每日 1,000 人配額</strong>，旺季請提前 3–6 個月預訂</div>
+        <div class="s-title">🏪 船宿評比</div>
+        <div class="op-cards">
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Neptune Komodo Sea Dragon</span><span class="op-score">⭐ CP 王</span></div><div class="op-price-tag">7D6N $1,646<br>NT$52,700</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ CP 值最高；台灣 KOL 超詳細 5 篇評測（Flyturtlex）；食宿穩定；LiveAboard.com 持續 9.4/10</div>
+              <div class="op-cons"><strong>❌</strong> 容量偏大，旺季入水稍擁擠</div>
+            </div>
+          </div>
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">La Galigo</span></div><div class="op-price-tag">7D6N ~$2,000–2,400<br>NT$64–77K</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 口碑最穩固；2024–2025 大量正評；食物飯店級</div>
+              <div class="op-cons"><strong>❌</strong> 木船噪音；A/C 艙室效果較弱</div>
+            </div>
+          </div>
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Indo Aggressor</span><span class="op-score">⚠️ 注意事件</span></div><div class="op-price-tag">中高端</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 品牌連鎖，設備穩定</div>
+              <div class="op-cons"><strong>❌ 嚴重事件</strong><br><strong>2024/3：業者提前 2 天得知停航仍未通知旅客；宣稱「登船即視為完成」，旅遊保險難索賠</strong>（ScubaBoard 投訴）</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-title">📖 KOL 攻略</div>
+        <div class="kol-grid">
+          <a class="kol-card" href="https://vocus.cc/article/667b78aafd89780001c38850" target="_blank"><div class="kc-type">🇹🇼 台灣 KOL · Flyturtlex</div><div class="kc-title">海龍系列轉機篇（5篇起點）</div><div class="kc-desc">台灣視角超詳細：轉機、食宿、Castle Rock、城堡水晶宮</div></a>
+          <a class="kol-card" href="https://divehappy.com/komodo-liveaboard-diving-review-june-2025/" target="_blank"><div class="kc-type">📝 DiveHappy · Jun 2025</div><div class="kc-title">9 天船宿真實記錄（Damai II）</div><div class="kc-desc">Bima→Saleh Bay→Sangeang→Komodo 完整行程</div></a>
+          <a class="kol-card" href="https://www.divingsquad.com/best-komodo-liveaboard-reviews/" target="_blank"><div class="kc-type">📊 DivingSquad 2026</div><div class="kc-title">科莫多 10 艘船宿完整比較</div><div class="kc-desc">含實際體驗，全面評比</div></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB: 長程 ═══ -->
+<div id="tab-long" class="content">
+  <div class="sec-head">🔴 長程目的地 <span class="trip-len-badge">8–14 天 · 預算 NT$10 萬+</span></div>
+  <div class="rank-order-note">📊 以下按<strong>整體潛水品質排序</strong>（四王群島 — 全球最高海洋生物多樣性；馬代深南線 — 全球虎鯊密度最高）</div>
+
+  <!-- #1 四王群島 -->
+  <div class="dest-card">
+    <div class="dc-color-bar color-bar-raja"></div>
+    <div class="dest-card-header" onclick="toggleCard('raja')">
+      <div class="dc-rank">1</div>
+      <div><div class="dc-name">🇮🇩 四王群島 Raja Ampat</div><div class="dc-animals">🦋 Manta 20–30隻（2月） · 🐠 全球最高生物多樣性 · 🦈 鬚鯊/Walking Shark</div></div>
+      <div class="dc-badges">
+        <span class="badge badge-cost">NT$10–15萬</span>
+        <span class="badge badge-time">最佳：10月–4月</span>
+        <span class="badge badge-level">OW（強流點 AOW）</span>
+      </div>
+      <div class="dc-arrow" id="arrow-raja">▼</div>
+    </div>
+    <div class="dest-card-detail" id="detail-raja">
+      <div class="dc-inner">
+        <div class="s-title">費用明細（9D8N 中端）</div>
+        <div class="cost-row">
+          <div class="cost-cell"><div class="cc-label">✈ 機票 TPE→CGK→SOQ（春節）</div><div class="cc-usd">NT$19,200–33,600</div></div>
+          <div class="cost-cell"><div class="cc-label">🚢 船宿（9D8N Panunee）</div><div class="cc-usd">NT$90,000–112,000</div></div>
+          <div class="cost-cell"><div class="cc-label">🏝 海洋公園 + 港口費</div><div class="cc-usd">NT$9,920–12,640</div></div>
+          <div class="cost-cell"><div class="cc-label">🏨 雅加達過夜 + 雜費</div><div class="cc-usd">NT$5,760</div></div>
+        </div>
+        <div class="s-title">為什麼排第一？</div>
+        <div class="tags">
+          <span class="tag tag-green">🦋 Manta Sandy — 清潔站 20–30 隻群舞，2月旺季頂峰</span>
+          <span class="tag tag-green">🌊 全球最高珊瑚多樣性（75% 世界珊瑚物種）</span>
+          <span class="tag tag-green">🐠 Cape Kri — 單潛 374 種魚類（世界紀錄）</span>
+          <span class="tag tag-amber">🦈 Walking Shark — 全球最罕見，在礁石上「走路」的鯊魚</span>
+        </div>
+        <div class="info">🗓 2027 春節：2/4–2/10（7天官方連假）+ 請假 2 天 = 11 天，完美配合 9D8N 船宿。New Panunee RAM04-2027（2/6–2/14）已售罄，可詢候補。</div>
+        <div class="s-title">✈ 航班路線（TPE → Sorong）</div>
+        <div class="tw"><table>
+          <tr><th>段次</th><th>路線</th><th>飛行時間</th><th>航空公司</th></tr>
+          <tr><td>第一段</td><td>TPE → CGK（雅加達）</td><td>~5h30m</td><td>EVA Air、中華航空、Garuda</td></tr>
+          <tr><td>轉機等待</td><td>CGK 機場</td><td>~2–4h</td><td>建議同航廈 Garuda / Batik</td></tr>
+          <tr class="t-rec"><td>第二段</td><td>CGK → SOQ（索隆）</td><td>~4h45m</td><td>Batik Air、Garuda Indonesia</td></tr>
+          <tr><td><strong>門到門</strong></td><td><strong>TPE → Sorong</strong></td><td><strong>~14–17h</strong></td><td></td></tr>
+        </table></div>
+        <div class="s-title">🏪 三艘重點船宿評比</div>
+        <div class="op-cards">
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">🔥 New Panunee</span><span class="op-score">⭐ 2027全場售罄！</span></div><div class="op-price-tag">42m鋁合金 · 22客<br>~$2,800–3,500/9D8N</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ <strong>2027 RA 全場售罄</strong>——最真實人氣印證；RAM04-2027（2/6–2/14 春節）；攝影室+5洗槽；導潛 Nofry / Hengky 被點名稱讚</div>
+              <div class="op-cons"><strong>❌</strong> <strong>春節場已售罄</strong>，需候補；22 人稍多，潛水組數多</div>
+            </div>
+          </div>
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Prestige Voyager</span><span class="op-score">Majestic Cruises · 鋼船</span></div><div class="op-price-tag">鋼殼穩定 · 24客<br>~$2,000–2,800/7D6N</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 鋼船適合暈船者；Majestic Cruises 運營；2026 週週出發，排期成熟</div>
+              <div class="op-cons"><strong>❌</strong> <strong>2027 CNY 艙期尚未公告</strong>；用戶評論偏少</div>
+            </div>
+          </div>
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Majestic Voyager</span><span class="op-score">Majestic Cruises · Phinisi</span></div><div class="op-price-tag">傳統木帆船 · 20客<br>~$1,800–2,400/7D6N</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 傳統 Phinisi 獨特體驗；Jacuzzi + 卡拉 OK + 香蕉船，氣氛最歡樂</div>
+              <div class="op-cons"><strong>❌ 2024/8 才開業，幾乎無第三方評論</strong>；最少 8 人成團；主流平台尚無評分</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-title">其他主要選項</div>
+        <div class="tw"><table>
+          <tr><th>船名</th><th>定位</th><th>USD/人（船宿）</th><th>TWD</th><th>天數</th><th>用戶評價</th></tr>
+          <tr><td>La Galigo</td><td>中端CP王</td><td class="t-usd">$2,000–2,400</td><td class="t-twd">NT$64–77k</td><td>7D6N</td><td>✅ 最多評論</td></tr>
+          <tr><td>Ambai</td><td>全能中高端</td><td class="t-usd">$2,800–3,200</td><td class="t-twd">NT$90–102k</td><td>9D8N</td><td>✅ DivingSquad 冠軍</td></tr>
+          <tr><td>Coralia</td><td>高端奢華</td><td class="t-usd">$3,200+</td><td class="t-twd">NT$102k+</td><td>7–9D</td><td>✅ 多位旅客 10/10</td></tr>
+          <tr><td>Damai I</td><td>頂奢水攝</td><td class="t-usd">$6,290+</td><td class="t-twd">NT$201K+</td><td>11D</td><td>✅ 業界頂尖</td></tr>
+        </table></div>
+        <div class="s-title">📖 KOL 攻略</div>
+        <div class="kol-grid">
+          <a class="kol-card" href="https://www.divingsquad.com/raja-ampat-liveaboard-reviews/" target="_blank"><div class="kc-type">📊 DivingSquad 2026</div><div class="kc-title">Best Raja Ampat Liveaboard Reviews</div><div class="kc-desc">完整排名 Ambai、Coralia、La Galigo，含真實用戶評分</div></a>
+          <a class="kol-card" href="https://divehappy.com/mid-range-raja-ampat-liveaboards/" target="_blank"><div class="kc-type">📝 DiveHappy 2026</div><div class="kc-title">Mid-Range Raja Ampat Liveaboards</div><div class="kc-desc">中端船宿深度比較，含 La Galigo 實測</div></a>
+          <a class="kol-card" href="https://panunee.com/schedules-rates-all-trips" target="_blank"><div class="kc-type">📋 官方排期</div><div class="kc-title">New Panunee 2027 全排期確認</div><div class="kc-desc">RAM04-2027（2/6–2/14）已售罄，候補聯繫</div></a>
+          <a class="kol-card" href="https://www.lagaligoliveaboard.com/raja-ampat-liveaboard-cost-guide/" target="_blank"><div class="kc-type">💰 費用指南</div><div class="kc-title">Raja Ampat 費用完整分析</div><div class="kc-desc">從預算到頂奢，含港口 + 公園費說明</div></a>
+        </div>
+        <div style="background:#E8F5E9;border-left:3px solid #2A8A5E;border-radius:6px;padding:9px 14px;font-size:12px;color:#0a3d20;margin:8px 0">
+          ✅ <strong>Majestic Voyager + Prestige Voyager</strong> 為同一家 <strong>Majestic Cruises</strong>（majesticcruisesid.com）。聯絡：WhatsApp +62 877 9419 0938<br>
+          ✅ <strong>New Panunee RAM04-2027（2/6–2/14）</strong>已確認春節黃金場，目前售罄可詢候補。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- #2 馬代深南線 -->
+  <div class="dest-card">
+    <div class="dc-color-bar color-bar-maldives"></div>
+    <div class="dest-card-header" onclick="toggleCard('maldives')">
+      <div class="dc-rank">2</div>
+      <div><div class="dc-name">🇲🇻 馬代深南線 Deep South</div><div class="dc-animals">🐯 虎鯊（全球密度最高） · 🦈 鐮狀真鯊 · 🦋 大洋 Manta · ⚓ 沉船</div></div>
+      <div class="dc-badges">
+        <span class="badge badge-cost">NT$12.7–13.3萬</span>
+        <span class="badge badge-time">最佳：2月 ⭐ 春節</span>
+        <span class="badge badge-level">AOW + 100潛 強制</span>
+      </div>
+      <div class="dc-arrow" id="arrow-maldives">▼</div>
+    </div>
+    <div class="dest-card-detail" id="detail-maldives">
+      <div class="dc-inner">
+        <div class="s-title">費用明細（8D7N · Infinity X 6人9折）</div>
+        <div class="cost-row">
+          <div class="cost-cell"><div class="cc-label">🚢 船宿（9折）</div><div class="cc-usd">USD 2,419</div><div class="cc-twd">NT$ 77,400</div></div>
+          <div class="cost-cell"><div class="cc-label">✈ 國際機票 TPE→MLE</div><div class="cc-usd">USD 900–1,100</div><div class="cc-twd">NT$ 28,800–35,200</div></div>
+          <div class="cost-cell"><div class="cc-label">🛫 國內線 MLE⇄GAN</div><div class="cc-usd">USD 362</div><div class="cc-twd">NT$ 11,600</div></div>
+          <div class="cost-cell"><div class="cc-label">📦 住宿/小費/保險</div><div class="cc-usd">USD ~270</div><div class="cc-twd">NT$ 8,600</div></div>
+        </div>
+        <div class="s-title">主要看點</div>
+        <div class="tags">
+          <span class="tag tag-amber">🐯 虎鯊 Tiger Shark — Fuvahmulah「Tiger Zoo」，全球最高密度</span>
+          <span class="tag tag-amber">🦈 鐮狀真鯊 Thresher（11月–2月）</span>
+          <span class="tag tag-green">🦋 大洋 Manta Ray（Addu Atoll · Maa Kandu）</span>
+          <span class="tag tag-wreck">⚓ HMS British Loyalty WWII 英軍油輪沉船</span>
+        </div>
+        <div class="warn-red">⚠️ AOW + 100 潛為硬性要求；春節場優先 6–12 個月前訂；虎鯊投餌爭議（Emperor 拒絕，Infinity X 視情況）</div>
+        <div class="s-title">🏪 船宿評比</div>
+        <div class="op-cards">
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Prestige Scuba Infinity X</span><span class="op-score">⭐ 翼潛社首選</span></div><div class="op-price-tag">Superior $2,688<br>6人9折 $2,419</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 6人9折優惠；中文窗口；Jacuzzi、攝影室、戶外吧台；2026 多個艙期公告</div>
+              <div class="op-cons"><strong>❌</strong> <strong>2027 艙期尚未公告</strong>，需立刻聯繫（WhatsApp +60 12-355 2588）</div>
+            </div>
+          </div>
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Carpe Diem Maldives</span></div><div class="op-price-tag">8D7N $3,350–3,700<br>2027艙期已公告</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 2027 艙期已公告（Jan–Mar）；8–12 人極私密；餐飲業界公認最好</div>
+              <div class="op-cons"><strong>❌</strong> 比 Infinity X 貴 40%；部分評論指導潛「引導失當」</div>
+            </div>
+          </div>
+          <div class="op-card">
+            <div class="op-head"><div><span class="op-name">Emperor Divers</span><span class="op-score">知名連鎖</span></div><div class="op-price-tag">7–8夜 $2,058–2,572<br>NT$65,856–82,304</div></div>
+            <div class="op-body">
+              <div class="op-pros">✅ 明確反投餌；品牌信譽穩定；AOW+100潛嚴格執行</div>
+              <div class="op-cons"><strong>❌ TripAdvisor</strong>：淋浴故障、艙房鏽斑、Jacuzzi損壞、無USB充電插座</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-title">Carpe Diem 2027 已公告艙期</div>
+        <div class="tw"><table>
+          <tr><th>出發</th><th>返回</th><th>天數</th><th>Standard USD</th></tr>
+          <tr><td>Jan 30</td><td>Feb 06</td><td>8D</td><td class="t-usd">$3,350</td></tr>
+          <tr class="t-rec"><td><strong>Feb 06</strong></td><td><strong>Feb 18</strong></td><td><strong>13D</strong></td><td class="t-usd">詢價</td></tr>
+          <tr><td>Feb 18</td><td>Mar 02</td><td>13D</td><td class="t-usd">詢價</td></tr>
+        </table></div>
+        <div class="s-title">📖 KOL 攻略</div>
+        <div class="kol-grid">
+          <a class="kol-card" href="https://www.youtube.com/watch?v=XUiCzKPqgw4" target="_blank"><div class="kc-type">▶ YouTube · Feb 2025</div><div class="kc-title">Fuvahmulah — 30 條虎鯊同框！</div><div class="kc-desc">超壯觀水下紀錄，真實評估 Tiger Zoo 現況</div></a>
+          <a class="kol-card" href="https://bluetrend.media/maldives-deep-south-diving-trip-tiger-shark-manta/" target="_blank"><div class="kc-type">📝 BlueTrend 攻略</div><div class="kc-title">馬代深南線完整攻略（含影片）</div><div class="kc-desc">虎鯊 + Manta 雙目標路線，各環礁詳介</div></a>
+          <a class="kol-card" href="https://www.youtube.com/watch?v=6NHE0FT8tcI" target="_blank"><div class="kc-type">▶ YouTube 4K · Mar 2025</div><div class="kc-title">Maldives Deep South 完整行程記錄</div><div class="kc-desc">Huvadhu / Fuvahmulah / Addu 全段 4K 影像</div></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.content').forEach(e=>e.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+function tog(el){el.classList.toggle('done')}
+function toggleCard(id){
+  const detail = document.getElementById('detail-'+id);
+  const arrow = document.getElementById('arrow-'+id);
+  if(detail.classList.contains('open')){
+    detail.classList.remove('open');
+    arrow.classList.remove('open');
+    arrow.textContent='▼';
+  } else {
+    detail.classList.add('open');
+    arrow.classList.add('open');
+    arrow.textContent='▲';
+  }
+}
+</script>
+</body>
+</html>

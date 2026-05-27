@@ -1,0 +1,654 @@
+{
+  "_note": "業者資料庫，由各目的地MD及船宿報價MD轉換。warningLevel: 0=正常, 1=注意, 2=避免。",
+  "_schema": "v1.0",
+  "_generatedAt": "2026-05-27",
+
+  "operators": [
+
+    {
+      "id": "neptune-sea-dragon",
+      "name": "Komodo Sea Dragon（Neptune Group）",
+      "type": "liveaboard",
+      "destinations": ["komodo"],
+      "positioningTag": "中端CP王",
+      "priceRangeUSD": { "low": 1268, "high": 2024 },
+      "priceRangeTWD": { "low": 40600, "high": 64800 },
+      "typicalPackage": "6D5N 科莫多",
+      "typicalCostTWD": 40600,
+      "rating": 4.3,
+      "pros": [
+        "性價比業界最高，中端首選",
+        "台灣KOL Flyturtlex超詳細5篇評測，真實記錄",
+        "食宿水準超預期，服務穩定"
+      ],
+      "cons": [
+        "容量偏大（20–24人），旺季組數多、入水稍擁擠",
+        "2024年用戶反映設施一般，不如高端船宿精緻"
+      ],
+      "officialUrl": "https://www.neptune-diving.com",
+      "contact": "neptune-diving.com",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "la-galigo",
+      "name": "La Galigo",
+      "type": "liveaboard",
+      "destinations": ["komodo", "raja-ampat"],
+      "positioningTag": "老牌中端精品",
+      "priceRangeUSD": { "low": 2000, "high": 2400 },
+      "priceRangeTWD": { "low": 64000, "high": 77000 },
+      "typicalPackage": "7D6N",
+      "typicalCostTWD": 70000,
+      "rating": 4.4,
+      "pros": [
+        "大量2024–2025正面評論，口碑業界最穩固",
+        "食物品質業界稱讚，飯店級料理",
+        "導遊豐富在地知識，潛點選擇精準"
+      ],
+      "cons": [
+        "傳統木船噪音：輕睡者需帶耳塞",
+        "部分評論指A/C在艙室效果較弱（悶熱）"
+      ],
+      "officialUrl": "https://www.lagaligoliveaboard.com",
+      "contact": "lagaligoliveaboard.com",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "ambai",
+      "name": "Ambai",
+      "type": "liveaboard",
+      "destinations": ["komodo", "raja-ampat"],
+      "positioningTag": "DivingSquad 2026全能最佳",
+      "priceRangeUSD": { "low": 2800, "high": 3200 },
+      "priceRangeTWD": { "low": 90000, "high": 102400 },
+      "typicalPackage": "9D8N",
+      "typicalCostTWD": 96000,
+      "rating": 4.5,
+      "pros": [
+        "DivingSquad 2026評選「最佳全能型船宿」",
+        "免費Nitrox + Starlink、浮潛文化村健行等豐富活動",
+        "4人/導潛比，個人照顧最佳"
+      ],
+      "cons": [
+        "費用比同類貴20–30%",
+        "9–14天行程偏長，不適合短假"
+      ],
+      "officialUrl": "https://ambai-liveaboard.com",
+      "contact": "ambai-liveaboard.com",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "gaia-love",
+      "name": "Gaia Love",
+      "type": "liveaboard",
+      "destinations": ["komodo"],
+      "positioningTag": "現代遊艇高端",
+      "priceRangeUSD": { "low": 3500, "high": 5000 },
+      "priceRangeTWD": { "low": 112000, "high": 160000 },
+      "typicalPackage": "9–11天",
+      "typicalCostTWD": 136000,
+      "rating": 4.1,
+      "pros": [
+        "現代化設備，私密感強，附攝影室",
+        "私人陽台，22人容量"
+      ],
+      "cons": [
+        "費用偏高",
+        "部分評論指某些航次服務水準不一致"
+      ],
+      "officialUrl": null,
+      "contact": null,
+      "contactMethod": null,
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "indo-aggressor",
+      "name": "Indo Aggressor",
+      "type": "liveaboard",
+      "destinations": ["komodo"],
+      "positioningTag": "中高端⚠️有嚴重投訴",
+      "priceRangeUSD": { "low": 2500, "high": 3500 },
+      "priceRangeTWD": { "low": 80000, "high": 112000 },
+      "typicalPackage": null,
+      "typicalCostTWD": null,
+      "rating": 2.5,
+      "pros": [],
+      "cons": [
+        "2024年3月事件：天氣被港務局停止出發，業者提前2天知情後仍未通知旅客，旅客到達後才被告知",
+        "業者宣稱「登船即視為行程完成」，可能影響旅遊保險索賠（ScubaBoard真實投訴）"
+      ],
+      "officialUrl": null,
+      "contact": null,
+      "contactMethod": null,
+      "warningLevel": 2,
+      "warningNote": "⚠️ 嚴重投訴：2024年不告知旅客停航，索賠糾紛。建議避開。",
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "new-panunee",
+      "name": "New Panunee",
+      "type": "liveaboard",
+      "destinations": ["raja-ampat", "komodo"],
+      "positioningTag": "中端精品·最受歡迎",
+      "priceRangeUSD": { "low": 2800, "high": 3500 },
+      "priceRangeTWD": { "low": 89600, "high": 112000 },
+      "typicalPackage": "9D8N 四王群島",
+      "typicalCostTWD": 100800,
+      "rating": 4.6,
+      "pros": [
+        "2027年四王群島全場售罄——最真實的人氣印證",
+        "大型潛水甲板、5個沖洗槽、專業攝影室＋充電站",
+        "餐飲豐富：泰式／中式／日式自助餐",
+        "導潛Nofry、Hengky、Bol多次被點名稱讚"
+      ],
+      "cons": [
+        "2027春節場全售罄，需候補或選2/17–2/25場",
+        "22人稍多，高峰期入水組數多",
+        "ScubaBoard討論較少，口碑靠用戶自發分享"
+      ],
+      "officialUrl": "https://panunee.com",
+      "contact": "panunee.com/schedules-rates-all-trips",
+      "contactMethod": "Website",
+      "knownSchedules": [
+        { "code": "RAM03-2027", "route": "Raja Ampat + Misool", "departure": "2027-01-26", "return": "2027-02-03", "status": "sold_out" },
+        { "code": "RAM04-2027", "route": "Raja Ampat + Misool", "departure": "2027-02-06", "return": "2027-02-14", "status": "sold_out", "note": "春節黃金場" },
+        { "code": "RAM05-2027", "route": "Raja Ampat + Misool", "departure": "2027-02-17", "return": "2027-02-25", "status": "sold_out" }
+      ],
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "prestige-voyager",
+      "name": "Prestige Voyager",
+      "type": "liveaboard",
+      "destinations": ["raja-ampat"],
+      "positioningTag": "鋼船穩定·中高端",
+      "priceRangeUSD": { "low": 2000, "high": 2800 },
+      "priceRangeTWD": { "low": 64000, "high": 89600 },
+      "typicalPackage": "7D6N 四王群島",
+      "typicalCostTWD": 76800,
+      "rating": 4.2,
+      "pros": [
+        "鋼材船體穩定性優於木造，適合暈船者",
+        "2026年全年週週排期，運營成熟穩定"
+      ],
+      "cons": [
+        "2027 CNY艙期尚未公告，需提早詢問",
+        "用戶評論相對較少",
+        "24人容量偏大"
+      ],
+      "officialUrl": "https://majesticcruisesid.com/new-page",
+      "contact": "+62 877 9419 0938",
+      "contactMethod": "WhatsApp",
+      "warningLevel": 0,
+      "warningNote": "⚠️ 注意：此為印尼Majestic Cruises旗下，與馬代Prestige Scuba是完全不同的兩家公司。",
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "majestic-voyager",
+      "name": "Majestic Voyager",
+      "type": "liveaboard",
+      "destinations": ["raja-ampat"],
+      "positioningTag": "Phinisi新秀·中端",
+      "priceRangeUSD": { "low": 1800, "high": 2400 },
+      "priceRangeTWD": { "low": 57600, "high": 76800 },
+      "typicalPackage": "7D6N 四王群島",
+      "typicalCostTWD": 67200,
+      "rating": null,
+      "pros": [
+        "卡拉OK + Jacuzzi + 香蕉船，歡樂氣氛最強",
+        "傳統Phinisi獨特氛圍",
+        "價格比Prestige Voyager稍低"
+      ],
+      "cons": [
+        "2024年8月才開業，幾乎無公開第三方評論——最大風險",
+        "8人最低出發人數，小團需確保湊夠",
+        "主流平台（LiveAboard.com、TripAdvisor）尚無評分"
+      ],
+      "officialUrl": "https://majesticcruisesid.com/majesticvoyager",
+      "contact": "+62 877 9419 0938",
+      "contactMethod": "WhatsApp",
+      "warningLevel": 1,
+      "warningNote": "開業不足2年，無足夠第三方評論，需自行承擔風險。",
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "coralia",
+      "name": "Coralia",
+      "type": "liveaboard",
+      "destinations": ["raja-ampat"],
+      "positioningTag": "奢華全明星",
+      "priceRangeUSD": { "low": 3200, "high": 4500 },
+      "priceRangeTWD": { "low": 102400, "high": 144000 },
+      "typicalPackage": "7–9天",
+      "typicalCostTWD": 123200,
+      "rating": 4.6,
+      "pros": [
+        "多位旅客評「到目前為止最好的船宿，10/10」",
+        "30m²套房，攝影服務傳奇"
+      ],
+      "cons": [
+        "木船偶有搖晃",
+        "高峰期溝通偶延誤",
+        "價格不如Ambai CP值高"
+      ],
+      "officialUrl": "https://coralia-liveaboard.com",
+      "contact": "coralia-liveaboard.com",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "damai-i",
+      "name": "Damai I",
+      "type": "liveaboard",
+      "destinations": ["raja-ampat"],
+      "positioningTag": "頂奢水攝旗艦",
+      "priceRangeUSD": { "low": 6290, "high": 8375 },
+      "priceRangeTWD": { "low": 201280, "high": 268000 },
+      "typicalPackage": "11天 四王群島攝影工作坊",
+      "typicalCostTWD": 234640,
+      "rating": 4.9,
+      "pros": [
+        "業界頂尖水下攝影支援",
+        "12人極私密",
+        "世界最高評價"
+      ],
+      "cons": [
+        "費用為業界最高，僅適合水攝玩家或奢侈預算"
+      ],
+      "officialUrl": "https://dive-damai.com",
+      "contact": "dive-damai.com",
+      "contactMethod": "Website",
+      "knownSchedules": [
+        { "route": "Raja Ampat Photography Workshop", "departure": "2027-02-03", "return": "2027-02-14", "priceUSD": 6290, "status": "available" }
+      ],
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "prestige-scuba-infinity-x",
+      "name": "Prestige Scuba Infinity X",
+      "type": "liveaboard",
+      "destinations": ["maldives-deep-south"],
+      "positioningTag": "翼潛社合作首選·中高端",
+      "priceRangeUSD": { "low": 2419, "high": 2688 },
+      "priceRangeTWD": { "low": 77400, "high": 86000 },
+      "typicalPackage": "8D7N 深南線（6人9折優惠）",
+      "typicalCostTWD": 77400,
+      "rating": 4.3,
+      "pros": [
+        "翼潛社有台灣/港澳窗口，中文溝通無障礙",
+        "6人團達到9折，CP值業界最高",
+        "Jacuzzi、攝影室、戶外酒吧，設施完整"
+      ],
+      "cons": [
+        "2027年艙期尚未公佈，需提早盯緊",
+        "24人容量偏大，旺季熱鬧感強",
+        "用戶自發評論相對少（倚賴代理方口碑）"
+      ],
+      "officialUrl": "https://www.prestigescuba.com",
+      "contact": "+60 12-355 2588",
+      "contactMethod": "WhatsApp",
+      "agentContact": "翼潛社（科翼-翼潛社）WhatsApp +60 12-355 2588",
+      "knownSchedules": [
+        { "route": "深南線", "departure": "2026-01-24", "return": "2026-01-31", "status": "unknown" },
+        { "route": "深南線", "departure": "2026-01-31", "return": "2026-02-07", "status": "unknown" },
+        { "route": "深南線", "departure": "2026-03-07", "return": "2026-03-14", "status": "unknown" },
+        { "route": "深南線", "departure": "2026-03-21", "return": "2026-03-28", "status": "unknown" }
+      ],
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "carpe-diem",
+      "name": "Carpe Diem Maldives",
+      "type": "liveaboard",
+      "destinations": ["maldives-deep-south"],
+      "positioningTag": "中高端·知名度高",
+      "priceRangeUSD": { "low": 3350, "high": 3700 },
+      "priceRangeTWD": { "low": 107200, "high": 118400 },
+      "typicalPackage": "8D7N 深南線",
+      "typicalCostTWD": 112800,
+      "rating": 4.4,
+      "pros": [
+        "2027年艙期已公告，Feb 6–18春節場已可查詢",
+        "最高12次潛水/行程，含餐含綠稅",
+        "國際知名度高，英文評論豐富"
+      ],
+      "cons": [
+        "比Infinity X貴30–40%，無折扣機制",
+        "部分艙型需詢價，透明度不如競品",
+        "部分評論指導遊更換頻率稍高"
+      ],
+      "officialUrl": "https://www.carpediemmaldives-cruises.com",
+      "contact": "carpediemmaldives-cruises.com",
+      "contactMethod": "Website",
+      "knownSchedules": [
+        { "route": "深南線", "departure": "2027-01-30", "return": "2027-02-06", "status": "unknown" },
+        { "route": "深南線", "departure": "2027-02-06", "return": "2027-02-18", "duration": "13D", "status": "available" }
+      ],
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "emperor-divers",
+      "name": "Emperor Divers（Deep South）",
+      "type": "liveaboard",
+      "destinations": ["maldives-deep-south"],
+      "positioningTag": "品牌連鎖·拒絕投餌",
+      "priceRangeUSD": { "low": 2058, "high": 2572 },
+      "priceRangeTWD": { "low": 65856, "high": 82304 },
+      "typicalPackage": "7–8N 深南線",
+      "typicalCostTWD": 74000,
+      "rating": 4.1,
+      "pros": [
+        "明確拒絕投餌（不涉及Tiger Zoo爭議）",
+        "嚴格AOW+100潛要求，同船水準整齊",
+        "品牌連鎖穩定性高，艙期規律"
+      ],
+      "cons": [
+        "TripAdvisor有設施老化投訴（USB孔損壞、淋浴不穩定）",
+        "禁止投餌意味虎鯊可遇不可求，不保證必見"
+      ],
+      "officialUrl": "https://www.emperordivers.com/liveaboard-itinerary/deep-south/",
+      "contact": "emperordivers.com",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "scubaspa",
+      "name": "Scubaspa Yin / Yang",
+      "type": "liveaboard",
+      "destinations": ["maldives-deep-south"],
+      "positioningTag": "頂奢Spa+潛水",
+      "priceRangeUSD": { "low": 3750, "high": 5000 },
+      "priceRangeTWD": { "low": 120000, "high": 160000 },
+      "typicalPackage": "8D7N",
+      "typicalCostTWD": 140000,
+      "rating": 4.5,
+      "pros": [
+        "全球Spa+潛水的稀有組合",
+        "伴侶或放鬆型旅客首選，53m大船"
+      ],
+      "cons": [
+        "費用業界最高",
+        "注重水療但潛水深度有限"
+      ],
+      "officialUrl": null,
+      "contact": null,
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "evolution-diving",
+      "name": "Evolution Diving Resort",
+      "type": "dive-resort",
+      "destinations": ["malapascua", "cebu"],
+      "positioningTag": "媽媽島業界首選",
+      "priceRangeUSD": { "low": 250, "high": 450 },
+      "priceRangeTWD": { "low": 8000, "high": 14400 },
+      "typicalPackage": "3天套餐（含住宿+6潛）",
+      "typicalCostTWD": 11200,
+      "rating": 4.5,
+      "pros": [
+        "TripAdvisor持續評分領先，ScubaBoard多篇正面記錄（2024–2025）",
+        "最大4人/導潛比，個人照顧好",
+        "鐮狀真鯊機率極高，PADI 5*"
+      ],
+      "cons": [
+        "2025訪客反映工作人員有時在唱卡拉OK，顧客需等到歌唱完才被接待（ScubaBoard 2025）",
+        "高峰期房間品質比官網照片略遜（2024評論）",
+        "非最便宜選項"
+      ],
+      "officialUrl": "https://evolution.com.ph",
+      "contact": "evolution.com.ph",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "mario-dive-resort",
+      "name": "Mario Dive Resort",
+      "type": "dive-resort",
+      "destinations": ["bohol"],
+      "positioningTag": "薄荷島指定首選",
+      "priceRangeUSD": { "low": 93, "high": 130 },
+      "priceRangeTWD": { "low": 8000, "high": 19200 },
+      "typicalPackage": "3天6潛套餐（含住宿）",
+      "typicalCostTWD": 13000,
+      "rating": 4.6,
+      "pros": [
+        "Booking.com 9.2/10",
+        "老闆Mario和Anne超親切，員工服務一流",
+        "WhatsApp當天即回，溝通效率高",
+        "大泳池面海，創立2012年口碑穩定"
+      ],
+      "cons": [
+        "位於Panglao島，前往Balicasag需另搭船30–40分鐘",
+        "房間設施較基本（非頂級裝潢）"
+      ],
+      "officialUrl": "https://www.mariodiveresort.com",
+      "contact": "mariodiveresort.com",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "scuba-junkie",
+      "name": "Scuba Junkie",
+      "type": "dive-resort",
+      "destinations": ["sipadan"],
+      "positioningTag": "斯巴丹業界龍頭",
+      "priceRangeUSD": { "low": 350, "high": 650 },
+      "priceRangeTWD": { "low": 11200, "high": 20800 },
+      "typicalPackage": "3D/2N套餐（含1天Sipadan配額）",
+      "typicalCostTWD": 14400,
+      "rating": 4.4,
+      "pros": [
+        "TripAdvisor持續高評，潛水組織嚴謹",
+        "環保標準嚴格，導潛多為持照生物學家",
+        "2026年起每天3潛入場（最先公告）"
+      ],
+      "cons": [
+        "最少3天才保證1天Sipadan配額",
+        "2025 TripAdvisor評論指某講師態度惡劣、不專業（個案）",
+        "旺季房間供不應求，需早訂"
+      ],
+      "officialUrl": "https://www.scuba-junkie.com",
+      "contact": "scuba-junkie.com",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "seaventures",
+      "name": "Seaventures Dive Rig",
+      "type": "dive-resort",
+      "destinations": ["sipadan"],
+      "positioningTag": "廢棄鑽油台改建·特殊體驗",
+      "priceRangeUSD": { "low": 400, "high": 700 },
+      "priceRangeTWD": { "low": 12800, "high": 22400 },
+      "typicalPackage": "3D2N（含Sipadan配額）",
+      "typicalCostTWD": 17600,
+      "rating": 3.8,
+      "pros": [
+        "全球唯一鑽油台住宿，拍照獨特",
+        "24小時可自由夜潛礁魚，距Sipadan最近"
+      ],
+      "cons": [
+        "房間清潔問題：多篇TripAdvisor投訴架子有灰塵、浴室未清理",
+        "A/C不穩定：夜間冷氣有時失效，悶熱",
+        "食物單調：反覆Nasi Goreng+炸雞翅",
+        "網路不穩：天氣差時斷線"
+      ],
+      "officialUrl": "https://seaventures.com",
+      "contact": "seaventures.com",
+      "contactMethod": "Website",
+      "warningLevel": 1,
+      "warningNote": "清潔和A/C問題反覆被投訴，體驗穩定性不如Scuba Junkie。",
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "natural-blue",
+      "name": "Natural Blue",
+      "type": "dive-shop",
+      "destinations": ["okinawa"],
+      "positioningTag": "外國人首選·2026評論量#1",
+      "priceRangeUSD": { "low": 130, "high": 165 },
+      "priceRangeTWD": { "low": 4200, "high": 5300 },
+      "typicalPackage": "2潛含器材",
+      "typicalCostTWD": 4800,
+      "rating": 4.7,
+      "pros": [
+        "2026年Google沖繩潛水評論量#1",
+        "每梯限2組，個人照顧度高",
+        "唯一「Blue Cave認定Expert Shop」",
+        "提供GoPro拍攝，照片當天可取"
+      ],
+      "cons": [
+        "主要路線為青之洞窟觀光，對進階潛水員刺激度不足",
+        "旺季（7–8月）訂位困難，需提前2–4週預約",
+        "費用略高（外語服務溢價）"
+      ],
+      "officialUrl": "https://www.natural-blue.net/en",
+      "contact": "natural-blue.net",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "kaitou-marine",
+      "name": "Kaitou Marine Sports（海島）",
+      "type": "dive-shop",
+      "destinations": ["kerama"],
+      "positioningTag": "座間味在地40年老店",
+      "priceRangeUSD": { "low": 87, "high": 100 },
+      "priceRangeTWD": { "low": 2800, "high": 3200 },
+      "typicalPackage": "Fun Diving 2潛含器材",
+      "typicalCostTWD": 2900,
+      "rating": 4.5,
+      "pros": [
+        "40年在地老店，對座間味每個潛點瞭若指掌",
+        "可預約大翅鯨觀賞（1–3月）+早晨潛水一日程",
+        "導潛資深，潛點選擇精準"
+      ],
+      "cons": [
+        "網站與溝通主要為日文，建議提前用翻譯軟體聯繫",
+        "旺季（大翅鯨季）預約競爭激烈，建議3個月前預訂"
+      ],
+      "officialUrl": "https://kerama-diving.com",
+      "contact": "kerama-diving.com",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    },
+
+    {
+      "id": "manta-queen-1",
+      "name": "Manta Queen 1",
+      "type": "liveaboard",
+      "destinations": ["similan"],
+      "positioningTag": "預算首選",
+      "priceRangeUSD": { "low": 875, "high": 875 },
+      "priceRangeTWD": { "low": 25200, "high": 25200 },
+      "typicalPackage": "4D4N 斯米蘭",
+      "typicalCostTWD": 25200,
+      "rating": 4.0,
+      "pros": ["最親民價格", "老船但維護穩定"],
+      "cons": ["老船，空間稍擁擠", "18人同船偶有噪音", "行程不一定含Richelieu Rock，需確認"],
+      "officialUrl": "https://mantaqueen.com",
+      "contact": "similandivingtours.com",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-13"
+    },
+
+    {
+      "id": "manta-queen-5",
+      "name": "Manta Queen 5",
+      "type": "liveaboard",
+      "destinations": ["similan"],
+      "positioningTag": "含Richelieu Rock·中端",
+      "priceRangeUSD": { "low": 1094, "high": 1094 },
+      "priceRangeTWD": { "low": 31500, "high": 31500 },
+      "typicalPackage": "4D4N 斯米蘭+Richelieu Rock",
+      "typicalCostTWD": 31500,
+      "rating": 4.2,
+      "pros": ["含Richelieu Rock（鯨鯊聖地）", "20人"],
+      "cons": ["旺季艙位競爭激烈"],
+      "officialUrl": "https://mantaqueen.com",
+      "contact": "similandivingtours.com",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-13"
+    },
+
+    {
+      "id": "savedra-dive-center",
+      "name": "Savedra Dive Center",
+      "type": "dive-shop",
+      "destinations": ["cebu"],
+      "positioningTag": "Moalboal沙丁魚牆首選",
+      "priceRangeUSD": { "low": 50, "high": 100 },
+      "priceRangeTWD": { "low": 1600, "high": 3200 },
+      "typicalPackage": "2潛",
+      "typicalCostTWD": 2000,
+      "rating": 4.3,
+      "pros": ["Moalboal在地最知名潛店", "沙丁魚牆岸潛方便"],
+      "cons": ["旺季人潮多，分組有時等待較長"],
+      "officialUrl": "https://savedra.com",
+      "contact": "savedra.com",
+      "contactMethod": "Website",
+      "warningLevel": 0,
+      "warningNote": null,
+      "updatedAt": "2026-05-12"
+    }
+  ]
+}
