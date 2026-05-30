@@ -1,0 +1,16 @@
+# 個人設定（含個人資料，不推到 GitHub）
+01_個人偏好/
+
+# Claude Code 本地設定
+.claude/
+
+# Claude Cowork 技能（本地用，不需共享）
+.skills/
+
+# Word 文件（大型二進位，用 MD 版本取代）
+*.docx
+
+# OS 垃圾
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,210 @@
+{
+  "_note": "船期快取。status: open=可訂, sold_out=售罄, unknown=未確認, waitlist=候補, closed=已截止。sourceConfirmed=true 表示從官方管道確認，false 表示根據 MD 資料推算。",
+  "_schema": "v1.0",
+  "_updatedAt": "2026-05-27",
+  "_howToUpdate": "當用戶說「查 XX 船 YY 月船期」時，由 Claude 搜尋官網或代擬 WhatsApp 詢問，確認後更新此檔並設 sourceConfirmed: true",
+
+  "vessels": [
+
+    {
+      "operatorId": "new-panunee",
+      "vesselName": "New Panunee",
+      "lastChecked": "2026-05-12",
+      "sourceConfirmed": true,
+      "sourceUrl": "https://panunee.com/schedules-rates-all-trips",
+      "departures": [
+        {
+          "code": "RAM03-2027",
+          "destination": "raja-ampat",
+          "route": "Raja Ampat + Misool",
+          "departure": "2027-01-26",
+          "return": "2027-02-03",
+          "durationDays": 9,
+          "priceUSD": 3200,
+          "priceTWD": 102400,
+          "status": "sold_out",
+          "note": "已售罄"
+        },
+        {
+          "code": "RAM04-2027",
+          "destination": "raja-ampat",
+          "route": "Raja Ampat + Misool",
+          "departure": "2027-02-06",
+          "return": "2027-02-14",
+          "durationDays": 9,
+          "priceUSD": 3200,
+          "priceTWD": 102400,
+          "status": "sold_out",
+          "note": "春節黃金場，已售罄。配合台灣春節假期2027-02-05至02-11。"
+        },
+        {
+          "code": "RAM05-2027",
+          "destination": "raja-ampat",
+          "route": "Raja Ampat + Misool",
+          "departure": "2027-02-17",
+          "return": "2027-02-25",
+          "durationDays": 9,
+          "priceUSD": 3200,
+          "priceTWD": 102400,
+          "status": "sold_out",
+          "note": "已售罄"
+        }
+      ]
+    },
+
+    {
+      "operatorId": "prestige-scuba-infinity-x",
+      "vesselName": "Prestige Scuba Infinity X",
+      "lastChecked": "2026-05-12",
+      "sourceConfirmed": true,
+      "sourceUrl": "https://www.prestigescuba.com",
+      "departures": [
+        {
+          "code": null,
+          "destination": "maldives-deep-south",
+          "route": "深南線（GAN出發）",
+          "departure": "2026-01-24",
+          "return": "2026-01-31",
+          "durationDays": 8,
+          "priceUSD": 2419,
+          "priceTWD": 77400,
+          "status": "unknown",
+          "note": "需直接聯繫翼潛社確認是否有位"
+        },
+        {
+          "code": null,
+          "destination": "maldives-deep-south",
+          "route": "深南線（GAN出發）",
+          "departure": "2026-01-31",
+          "return": "2026-02-07",
+          "durationDays": 8,
+          "priceUSD": 2419,
+          "priceTWD": 77400,
+          "status": "unknown",
+          "note": "需直接聯繫翼潛社確認是否有位"
+        },
+        {
+          "code": null,
+          "destination": "maldives-deep-south",
+          "route": "深南線（GAN出發）",
+          "departure": "2026-03-07",
+          "return": "2026-03-14",
+          "durationDays": 8,
+          "priceUSD": 2419,
+          "priceTWD": 77400,
+          "status": "unknown",
+          "note": null
+        },
+        {
+          "code": null,
+          "destination": "maldives-deep-south",
+          "route": "深南線（GAN出發）",
+          "departure": "2026-03-21",
+          "return": "2026-03-28",
+          "durationDays": 8,
+          "priceUSD": 2419,
+          "priceTWD": 77400,
+          "status": "unknown",
+          "note": "2027年春節場尚未公告，建議2026年9月開始詢問"
+        }
+      ]
+    },
+
+    {
+      "operatorId": "carpe-diem",
+      "vesselName": "Carpe Diem Maldives",
+      "lastChecked": "2026-05-12",
+      "sourceConfirmed": true,
+      "sourceUrl": "https://www.carpediemmaldives-cruises.com",
+      "departures": [
+        {
+          "code": null,
+          "destination": "maldives-deep-south",
+          "route": "深南線",
+          "departure": "2027-01-30",
+          "return": "2027-02-06",
+          "durationDays": 8,
+          "priceUSD": 3350,
+          "priceTWD": 107200,
+          "status": "unknown",
+          "note": null
+        },
+        {
+          "code": null,
+          "destination": "maldives-deep-south",
+          "route": "深南線",
+          "departure": "2027-02-06",
+          "return": "2027-02-18",
+          "durationDays": 13,
+          "priceUSD": 3700,
+          "priceTWD": 118400,
+          "status": "available",
+          "note": "春節場13天長程，較完整覆蓋深南線"
+        }
+      ]
+    },
+
+    {
+      "operatorId": "damai-i",
+      "vesselName": "Damai I",
+      "lastChecked": "2026-05-12",
+      "sourceConfirmed": true,
+      "sourceUrl": "https://www.bluewaterphotostore.com/raja-ampat-luxury-liveaboard-photo-workshop-2027/",
+      "departures": [
+        {
+          "code": null,
+          "destination": "raja-ampat",
+          "route": "Raja Ampat 攝影工作坊",
+          "departure": "2027-02-03",
+          "return": "2027-02-14",
+          "durationDays": 12,
+          "priceUSD": 6290,
+          "priceTWD": 201280,
+          "status": "available",
+          "note": "Small Double艙型。頂奢水攝，適合預算充足的攝影愛好者。"
+        }
+      ]
+    },
+
+    {
+      "operatorId": "prestige-voyager",
+      "vesselName": "Prestige Voyager",
+      "lastChecked": "2026-05-12",
+      "sourceConfirmed": true,
+      "sourceUrl": "https://majesticcruisesid.com/new-page",
+      "departures": [
+        { "destination": "raja-ampat", "departure": "2026-01-04", "status": "unknown", "note": "週週出發，每週六" },
+        { "destination": "raja-ampat", "departure": "2026-01-12", "status": "unknown" },
+        { "destination": "raja-ampat", "departure": "2026-01-19", "status": "unknown" },
+        { "destination": "raja-ampat", "departure": "2026-01-26", "status": "unknown" },
+        { "destination": "raja-ampat", "departure": "2026-02-02", "status": "unknown" },
+        { "destination": "raja-ampat", "departure": "2026-02-09", "status": "unknown" },
+        { "destination": "raja-ampat", "departure": "2026-02-23", "status": "unknown", "note": "2027 CNY艙期尚未公告，需提早詢問" }
+      ]
+    }
+  ],
+
+  "pendingInquiries": [
+    {
+      "operatorId": "prestige-scuba-infinity-x",
+      "inquiryType": "2027年春節場期確認",
+      "priority": "high",
+      "note": "建議2026年9月開始詢問。聯繫翼潛社 WhatsApp +60 12-355 2588",
+      "status": "not_started"
+    },
+    {
+      "operatorId": "new-panunee",
+      "inquiryType": "候補名單確認",
+      "priority": "medium",
+      "note": "2027 RAM04/05 已售罄，可詢問候補機會",
+      "status": "not_started"
+    },
+    {
+      "operatorId": "prestige-voyager",
+      "inquiryType": "2027 CNY艙期確認",
+      "priority": "medium",
+      "note": "尚未公告，需直接詢問 +62 877 9419 0938",
+      "status": "not_started"
+    }
+  ]
+}

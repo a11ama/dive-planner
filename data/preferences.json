@@ -1,0 +1,40 @@
+{
+  "updatedAt": "2026-05-28",
+  "note": "Owner（Yun）的預設偏好設定。協作者的 agent 首次協作時應詢問自己的 user 是否有差異，並補充至 divers 陣列。",
+  "divers": [
+    {
+      "id": "owner",
+      "name": "Yun",
+      "role": "owner",
+      "certificationLevel": "AOW",
+      "loggedDives": "100–200",
+      "homeAirport": "TPE",
+      "budget": {
+        "shortTrip_TWD": "20000–50000",
+        "mediumShortTrip_TWD": "50000–80000",
+        "mediumTrip_TWD": "80000–120000",
+        "longTrip_TWD": "120000+",
+        "philosophy": "CP值優先：中端口碑業者，不追求頂奢船宿"
+      },
+      "likes": ["大物", "Manta Ray", "虎鯊", "鯨鯊", "鐮狀鯊", "豐富魚群", "珊瑚礁"],
+      "accepts": ["Tiger Zoo（付費稀有大物體驗）"],
+      "dislikes": ["洞穴潛水", "鑽洞", "一般沉船"],
+      "visited": ["斯米蘭（泰國）", "阿嘉島（沖繩）"],
+      "travelProfile": "台灣上班族，利用國定假日搭配請假，偏好 5–10 天行程",
+      "seasickness": "輕微，較大船宿為佳"
+    }
+  ],
+  "groupNote": "通常 2 人以上同行，協作者為熟識朋友，偏好差異小",
+  "collaboratorOnboarding": {
+    "instructions": "新協作者的 agent 首次加入時，請詢問你的 user 以下問題，並把答案補充到 divers 陣列：",
+    "questions": [
+      "潛水證照等級與目前潛水次數？",
+      "喜歡什麼類型的潛水（大物、珊瑚礁、強流、能見度優先）？",
+      "不喜歡或不接受的潛水類型？",
+      "每次旅行大概預算（含機票，每人台幣）？",
+      "已去過哪些潛點？",
+      "容易暈船嗎？",
+      "偏好幾人小船還是大船宿？"
+    ]
+  }
+}

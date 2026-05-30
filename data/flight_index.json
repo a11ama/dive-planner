@@ -1,0 +1,223 @@
+{
+  "_note": "機票基準票價表。用途：偵測特定月份票價是否比基準高出10%以上（漲幅警示）。所有價格為 TPE 出發來回廉航參考價（TWD，每人），旺季廉航估算，非最低特價亦非商務艙。",
+  "_schema": "v1.0",
+  "_updatedAt": "2026-05-27",
+  "_alertThresholdPct": 10,
+  "_howToUpdate": "每季由 Claude 搜尋 Skyscanner / Google Flights 更新。搜尋關鍵字：'TPE [目的地機場代碼] flight [月份] [年份] price'",
+  "_exchangeRate": { "USD_to_TWD": 32, "JPY_to_TWD": 0.222 },
+
+  "routes": [
+
+    {
+      "id": "tpe-okayama",
+      "origin": "TPE",
+      "destination": "OKA",
+      "destinationName": "沖繩那霸",
+      "destinationIds": ["okinawa", "kerama"],
+      "airline_note": "直飛，廉航常見（星宇/長榮直飛；Peach/JetStar偶有）",
+      "lastUpdated": "2026-05-27",
+      "sourceConfirmed": false,
+      "monthlyBaselineTWD": {
+        "1": 5500,
+        "2": 7000,
+        "3": 6000,
+        "4": 8500,
+        "5": 7500,
+        "6": 8000,
+        "7": 11000,
+        "8": 12000,
+        "9": 7500,
+        "10": 8000,
+        "11": 6000,
+        "12": 7000
+      },
+      "peakMonths": [7, 8],
+      "note": "直飛1.5h，廉航選項多，為最便宜潛水目的地。7–8月暑假高峰。"
+    },
+
+    {
+      "id": "tpe-ceb",
+      "origin": "TPE",
+      "destination": "CEB",
+      "destinationName": "菲律賓宿霧",
+      "destinationIds": ["bohol", "malapascua", "cebu"],
+      "airline_note": "廉航：Cebu Pacific、Philippines AirAsia；或經MNL轉",
+      "lastUpdated": "2026-05-27",
+      "sourceConfirmed": false,
+      "monthlyBaselineTWD": {
+        "1": 9000,
+        "2": 10000,
+        "3": 9500,
+        "4": 10500,
+        "5": 9000,
+        "6": 8500,
+        "7": 9500,
+        "8": 9500,
+        "9": 8500,
+        "10": 9000,
+        "11": 9500,
+        "12": 11000
+      },
+      "peakMonths": [1, 2, 12],
+      "note": "廉航選項豐富，CP值高。12–2月潛水旺季對應機票高峰。"
+    },
+
+    {
+      "id": "tpe-bki",
+      "origin": "TPE",
+      "destination": "BKI",
+      "destinationName": "馬來西亞哥打基納巴盧（斯巴丹）",
+      "destinationIds": ["sipadan"],
+      "airline_note": "AirAsia X或經KUL轉機；BKI有直飛",
+      "lastUpdated": "2026-05-27",
+      "sourceConfirmed": false,
+      "monthlyBaselineTWD": {
+        "1": 9000,
+        "2": 10500,
+        "3": 9500,
+        "4": 11000,
+        "5": 10000,
+        "6": 11000,
+        "7": 13000,
+        "8": 13500,
+        "9": 11000,
+        "10": 11500,
+        "11": 10000,
+        "12": 11500
+      },
+      "peakMonths": [7, 8],
+      "note": "斯巴丹旺季（4–10月）機票普遍較高。11月封閉，無需查詢。"
+    },
+
+    {
+      "id": "tpe-lbj",
+      "origin": "TPE",
+      "destination": "LBJ",
+      "destinationName": "印尼拉布安巴焦（科莫多）",
+      "destinationIds": ["komodo"],
+      "airline_note": "需經DPS(峇里島)轉機，DPS→LBJ需國內線；或TPE→CGK→LBJ",
+      "lastUpdated": "2026-05-27",
+      "sourceConfirmed": false,
+      "monthlyBaselineTWD": {
+        "1": 14000,
+        "2": 16000,
+        "3": 14000,
+        "4": 15000,
+        "5": 13000,
+        "6": 13500,
+        "7": 16000,
+        "8": 17000,
+        "9": 14000,
+        "10": 14500,
+        "11": 14000,
+        "12": 15000
+      },
+      "peakMonths": [7, 8, 2],
+      "note": "TPE→DPS約NT$8000–12000，DPS→LBJ國內線需另計約NT$3000–5000。春節期間DPS機票明顯漲價。"
+    },
+
+    {
+      "id": "tpe-soq",
+      "origin": "TPE",
+      "destination": "SOQ",
+      "destinationName": "印尼索隆（四王群島）",
+      "destinationIds": ["raja-ampat"],
+      "airline_note": "TPE→CGK（雅加達）→SOQ（索隆），含國內線；全程約14–17小時",
+      "lastUpdated": "2026-05-27",
+      "sourceConfirmed": false,
+      "monthlyBaselineTWD": {
+        "1": 21000,
+        "2": 26000,
+        "3": 20000,
+        "4": 19000,
+        "5": 18000,
+        "6": 19000,
+        "7": 22000,
+        "8": 23000,
+        "9": 19000,
+        "10": 19000,
+        "11": 21000,
+        "12": 22000
+      },
+      "peakMonths": [2, 7, 8],
+      "note": "2月春節含國內線CGK→SOQ，價格最高。CGK→SOQ國內線約NT$4000–7000需另計（部分平台可一起訂）。",
+      "breakdown": {
+        "TPE_to_CGK": { "low": 8000, "high": 15000 },
+        "CGK_to_SOQ": { "low": 4000, "high": 7000 }
+      }
+    },
+
+    {
+      "id": "tpe-gan",
+      "origin": "TPE",
+      "destination": "GAN",
+      "destinationName": "馬爾地夫甘島（深南線）",
+      "destinationIds": ["maldives-deep-south"],
+      "airline_note": "TPE→MLE（馬累）轉機（經SIN/KUL/DXB），再搭Maldivian Airlines→GAN國內線",
+      "lastUpdated": "2026-05-27",
+      "sourceConfirmed": false,
+      "monthlyBaselineTWD": {
+        "1": 30000,
+        "2": 34000,
+        "3": 30000,
+        "4": 27000,
+        "5": 25000,
+        "6": 24000,
+        "7": 28000,
+        "8": 29000,
+        "9": 24000,
+        "10": 26000,
+        "11": 29000,
+        "12": 33000
+      },
+      "peakMonths": [2, 12, 1],
+      "note": "TPE→MLE約NT$18000–27000；MLE→GAN國內線約NT$11600來回（單獨需在MLE住一晚）。總費用為合計。",
+      "breakdown": {
+        "TPE_to_MLE": { "low": 18000, "high": 27000 },
+        "MLE_to_GAN_roundtrip": 11600
+      }
+    },
+
+    {
+      "id": "tpe-hkt",
+      "origin": "TPE",
+      "destination": "HKT",
+      "destinationName": "泰國普吉（斯米蘭）",
+      "destinationIds": ["similan"],
+      "airline_note": "廉航：Scoot、AirAsia、Thai Lion；或經BKK轉機",
+      "lastUpdated": "2026-05-27",
+      "sourceConfirmed": false,
+      "monthlyBaselineTWD": {
+        "1": 10000,
+        "2": 11500,
+        "3": 10000,
+        "4": 9500,
+        "5": 9000,
+        "6": 8500,
+        "7": 10000,
+        "8": 10500,
+        "9": 9000,
+        "10": 9500,
+        "11": 10000,
+        "12": 12000
+      },
+      "peakMonths": [2, 12],
+      "note": "5/16–10/31斯米蘭封閉，此期間無需查詢。斯米蘭潛水旺季1–4月對應機票較高。"
+    }
+
+  ],
+
+  "skyscannerDeepLinks": {
+    "_template": "https://www.skyscanner.com.tw/transport/flights/{FROM}/{TO}/{OUT_YYYYMMDD}/{RETURN_YYYYMMDD}/?adults={N}&currency=TWD",
+    "examples": [
+      {
+        "label": "2人春節 TPE→SOQ 四王群島",
+        "url": "https://www.skyscanner.com.tw/transport/flights/TPE/SOQ/20270205/20270214/?adults=2&currency=TWD"
+      },
+      {
+        "label": "2人清明 TPE→LBJ 科莫多",
+        "url": "https://www.skyscanner.com.tw/transport/flights/TPE/LBJ/20270402/20270408/?adults=2&currency=TWD"
+      }
+    ]
+  }
+}

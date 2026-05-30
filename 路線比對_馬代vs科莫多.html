@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>潛旅路線比對 — 馬代深南線 vs 科莫多</title>
+<style>
+  :root {
+    --ocean: #064E8C;
+    --teal: #0A7E7E;
+    --coral: #E85A4F;
+    --sand: #F5F0E8;
+    --deepblue: #0D1B2A;
+    --maldive: #0A7E7E;
+    --komodo: #5E3A87;
+    --green: #2D7A3A;
+    --warn: #C85B10;
+    --gold: #C9930A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'PingFang TC', 'Noto Sans TC', sans-serif; background: var(--deepblue); color: #fff; min-height: 100vh; }
+
+  /* Header */
+  .header { background: linear-gradient(135deg, #064E8C 0%, #0A7E7E 100%); padding: 20px 24px 16px; text-align: center; }
+  .header h1 { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+  .header p { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+  .updated { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 8px; }
+
+  /* Tab bar */
+  .tabs { display: flex; background: #0D1B2A; border-bottom: 1px solid rgba(255,255,255,0.08); overflow-x: auto; }
+  .tab { padding: 12px 18px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; color: rgba(255,255,255,0.5); transition: all 0.2s; }
+  .tab:hover { color: rgba(255,255,255,0.8); }
+  .tab.active { color: #fff; }
+  .tab.active.mal { border-color: var(--maldive); }
+  .tab.active.kom { border-color: var(--komodo); }
+  .tab.active.cmp { border-color: var(--gold); }
+  .tab.active.kol { border-color: var(--coral); }
+
+  /* Section content */
+  .section { display: none; padding: 20px 16px; max-width: 900px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* Cards */
+  .card { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.08); }
+  .card-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .badge { font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 700; }
+  .badge-teal { background: var(--maldive); color: #fff; }
+  .badge-purple { background: var(--komodo); color: #fff; }
+  .badge-green { background: var(--green); color: #fff; }
+  .badge-warn { background: var(--warn); color: #fff; }
+  .badge-gold { background: var(--gold); color: #fff; }
+
+  /* Price banner */
+  .price-banner { background: linear-gradient(135deg, #085041 0%, #0A6E5E 100%); border-radius: 14px; padding: 18px 20px; margin-bottom: 18px; text-align: center; }
+  .price-banner .main-price { font-size: 30px; font-weight: 800; color: #fff; letter-spacing: 1px; }
+  .price-banner .sub-price { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+  .price-banner .label { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 8px; }
+
+  .price-banner-purple { background: linear-gradient(135deg, #3D1A6A 0%, #5E3A87 100%); }
+
+  /* Table */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .tbl th { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); padding: 8px 10px; text-align: left; font-weight: 600; }
+  .tbl td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: top; }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl .highlight { color: #4FCFA0; font-weight: 700; }
+  .tbl .warn-text { color: #F5A623; }
+  .tbl .rec { background: rgba(10,126,126,0.15); }
+
+  /* Pros/Cons */
+  .pro-con { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .pros { background: rgba(45,122,58,0.15); border: 1px solid rgba(45,122,58,0.3); border-radius: 10px; padding: 12px; }
+  .cons { background: rgba(200,91,16,0.12); border: 1px solid rgba(200,91,16,0.3); border-radius: 10px; padding: 12px; }
+  .pro-con h4 { font-size: 12px; margin-bottom: 8px; }
+  .pros h4 { color: #6FE87D; }
+  .cons h4 { color: #F5A623; }
+  .pro-con ul { padding-left: 14px; font-size: 12px; color: rgba(255,255,255,0.8); }
+  .pro-con li { margin-bottom: 5px; }
+
+  /* Comparison grid */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .compare-col-title { font-size: 16px; font-weight: 800; text-align: center; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+  .mal-title { background: linear-gradient(90deg, #085041, #0A7E7E); }
+  .kom-title { background: linear-gradient(90deg, #3D1A6A, #5E3A87); }
+
+  /* KOL links */
+  .kol-card { border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; text-decoration: none; display: block; transition: all 0.2s; }
+  .kol-card:hover { opacity: 0.85; transform: translateY(-1px); }
+  .kol-card.youtube { background: rgba(255,0,0,0.12); border: 1px solid rgba(255,0,0,0.25); }
+  .kol-card.blog { background: rgba(10,126,126,0.15); border: 1px solid rgba(10,126,126,0.3); }
+  .kol-card.tw { background: rgba(100,150,255,0.12); border: 1px solid rgba(100,150,255,0.25); }
+  .kol-icon { font-size: 16px; margin-right: 8px; }
+  .kol-title { font-size: 13px; font-weight: 700; color: #fff; }
+  .kol-desc { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+  /* Section header */
+  .section-header { font-size: 15px; font-weight: 800; color: rgba(255,255,255,0.9); margin: 20px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .section-header::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+
+  /* Warn box */
+  .warn-box { background: rgba(200,91,16,0.15); border: 1px solid rgba(200,91,16,0.35); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; font-size: 12px; color: rgba(255,255,255,0.85); }
+  .warn-box strong { color: #F5A623; }
+
+  /* Info box */
+  .info-box { background: rgba(10,126,126,0.12); border: 1px solid rgba(10,126,126,0.3); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; font-size: 12px; color: rgba(255,255,255,0.85); }
+  .info-box strong { color: #4FCFA0; }
+
+  /* Pill tags */
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; margin: 2px; }
+  .tag-blue { background: rgba(10,78,140,0.5); border: 1px solid rgba(10,78,140,0.8); }
+  .tag-teal { background: rgba(10,126,126,0.4); border: 1px solid rgba(10,126,126,0.7); }
+  .tag-purple { background: rgba(94,58,135,0.4); border: 1px solid rgba(94,58,135,0.7); }
+
+  @media (max-width: 600px) {
+    .compare-grid { grid-template-columns: 1fr; }
+    .pro-con { grid-template-columns: 1fr; }
+    .header h1 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>🤿 潛旅路線深度比對</h1>
+  <p>馬代深南線 Deep South &nbsp;vs&nbsp; 科莫多 Komodo</p>
+  <p class="updated">研究更新：2026-05-11 · 資料來源：實際網站報價 + KOL 評測</p>
+</div>
+
+<!-- Tab bar -->
+<div class="tabs">
+  <div class="tab mal active" onclick="showTab('mal', this)">🐠 馬代深南線</div>
+  <div class="tab kom" onclick="showTab('kom', this)">🦎 科莫多</div>
+  <div class="tab cmp" onclick="showTab('cmp', this)">⚖️ 兩路線比對</div>
+  <div class="tab kol" onclick="showTab('kol', this)">🎬 KOL 評測</div>
+</div>
+
+<!-- ===== MALDIVES DEEP SOUTH ===== -->
+<div id="tab-mal" class="section active">
+
+  <div class="price-banner">
+    <div class="main-price">NT$ 126,400 – 132,800 /人</div>
+    <div class="sub-price">USD 3,951 – 4,151 /人（含機票 + 國內線 + 船宿）</div>
+    <div class="label">🎯 Infinity X 6 人同行 9 折方案（出發地：台灣）　引薦：翼潛社</div>
+  </div>
+
+  <!-- 我們的方案 -->
+  <div class="section-header">⭐ 我們的方案：Infinity X (Prestige Scuba)</div>
+  <div class="card">
+    <div class="card-title">2027 春節 · Infinity X Deep South <span class="badge badge-teal">已詢價</span></div>
+    <table class="tbl">
+      <tr><td>船宿費（Superior · 6人9折）</td><td class="highlight">USD 2,419 / NT$77,400</td></tr>
+      <tr><td>國際機票 TPE→MLE→TPE</td><td class="warn-text">USD 900–1,100 / NT$28,800–35,200</td></tr>
+      <tr><td>國內線 MLE⇄GAN</td><td>USD 362 / NT$11,600</td></tr>
+      <tr><td>其他（住宿/小費/保險）</td><td>USD 270 / NT$8,600</td></tr>
+      <tr class="rec"><td><strong>每人合計</strong></td><td class="highlight"><strong>USD 3,951–4,151 / NT$126,400–132,800</strong></td></tr>
+      <tr class="rec"><td><strong>6 人合計</strong></td><td class="highlight"><strong>NT$758,600–796,800</strong></td></tr>
+    </table>
+    <div style="margin-top:10px; font-size:11px; color:rgba(255,255,255,0.5)">
+      ⚠️ 2027 年艙期尚未公告 · 聯繫 Prestige Scuba: WhatsApp +60 12-355 2588
+    </div>
+  </div>
+
+  <!-- 主要競爭船宿 -->
+  <div class="section-header">🚢 其他深南線船宿報價對比</div>
+  <div class="card">
+    <table class="tbl">
+      <tr>
+        <th>船宿</th>
+        <th>行程</th>
+        <th>最低 USD/人</th>
+        <th>出發港</th>
+        <th>備注</th>
+      </tr>
+      <tr class="rec">
+        <td><strong>Infinity X (Prestige)</strong></td><td>8D7N</td>
+        <td class="highlight">$2,419 ⬅ 我們</td><td>GAN</td>
+        <td>6 人 9 折；翼潛社引薦</td>
+      </tr>
+      <tr>
+        <td>Carpe Diem Maldives</td><td>8D7N</td>
+        <td>$3,350</td><td>GAN</td>
+        <td>Standard 含綠稅，12 潛，3 餐</td>
+      </tr>
+      <tr>
+        <td>Carpe Diem Superior</td><td>8D7N</td>
+        <td>$3,700</td><td>GAN</td>
+        <td>上層甲板艙</td>
+      </tr>
+      <tr>
+        <td>Emperor Divers（多艘）</td><td>7–8N</td>
+        <td>$2,058–2,572</td><td>GAN</td>
+        <td>英國老牌，4 艘船選擇多</td>
+      </tr>
+      <tr>
+        <td>Blue Force One</td><td>7–8N</td>
+        <td>$1,890–3,150</td><td>MLE or GAN</td>
+        <td>高端選項</td>
+      </tr>
+      <tr>
+        <td>Scubaspa Yin/Yang</td><td>7N+</td>
+        <td>$3,750+</td><td>Kooddoo→GAN</td>
+        <td>奢華 Spa，最貴選項</td>
+      </tr>
+    </table>
+    <div style="margin-top:10px; font-size:11px; color:rgba(255,255,255,0.5)">* 以上均不含機票及 MLE→GAN 國內線（USD ~362）</div>
+  </div>
+
+  <!-- Carpe Diem 2027 船期 -->
+  <div class="section-header">📅 Carpe Diem 2027 已公告船期</div>
+  <div class="card">
+    <table class="tbl">
+      <tr><th>出發</th><th>返回</th><th>天數</th><th>Standard</th><th>Superior</th></tr>
+      <tr><td>Jan 05</td><td>Jan 15</td><td>11D/10N</td><td colspan="2" style="color:#F5A623">詢價</td></tr>
+      <tr><td>Jan 16</td><td>Jan 23</td><td>8D/7N</td><td>$3,350</td><td>$3,700</td></tr>
+      <tr><td>Jan 23</td><td>Jan 30</td><td>8D/7N</td><td>$3,350</td><td>$3,700</td></tr>
+      <tr><td>Jan 30</td><td>Feb 06</td><td>8D/7N</td><td>$3,350</td><td>$3,700</td></tr>
+      <tr style="background:rgba(10,126,126,0.15)"><td><strong>Feb 06</strong></td><td><strong>Feb 18</strong></td><td><strong>13D/12N</strong></td><td colspan="2" style="color:#4FCFA0">詢價（含春節窗口！）</td></tr>
+      <tr><td>Feb 18</td><td>Mar 02</td><td>13D/12N</td><td colspan="2" style="color:#F5A623">詢價</td></tr>
+    </table>
+    <div style="font-size:11px; color:rgba(255,255,255,0.5); margin-top:8px">出發/返回港：GAN（Addu Atoll）</div>
+  </div>
+
+  <!-- 必見大物 -->
+  <div class="section-header">🦈 路線必見大物</div>
+  <div class="card">
+    <div style="display:flex; flex-wrap:wrap; gap:8px">
+      <span class="tag tag-teal">🐯 虎鯊 Tiger Shark</span>
+      <span class="tag tag-teal">🦈 錘頭鯊 Hammerhead</span>
+      <span class="tag tag-teal">🦈 鐮狀真鯊 Thresher</span>
+      <span class="tag tag-teal">🌊 海洋 Manta Ray</span>
+      <span class="tag tag-teal">🐋 鯨鯊 Whale Shark</span>
+      <span class="tag tag-blue">🐟 Mola Mola（偶見）</span>
+      <span class="tag tag-blue">WWII 沉船 HMS British Loyalty</span>
+      <span class="tag tag-blue">灰礁鯊 / 銀尖鯊</span>
+    </div>
+    <div style="margin-top:10px; font-size:12px; color:rgba(255,255,255,0.7)">
+      核心大物點：Fuvahmulah South Plateau（全球最佳虎鯊點之一）
+    </div>
+  </div>
+
+  <!-- 注意事項 -->
+  <div class="section-header">⚠️ 注意事項</div>
+  <div class="warn-box">
+    <strong>強流危險</strong>：多數潛點流況強且難以預測。Emperor 等業者要求 AOW + 100 潛。許多潛點超過 18m。
+  </div>
+  <div class="warn-box">
+    <strong>Tiger Zoo 爭議</strong>：Fuvahmulah 存在投餌誘鯊行為（Tiger Zoo），虎鯊因食物吸引大量聚集，體驗不自然。Emperor 明確拒絕參與；建議選擇不投餌的業者。
+  </div>
+  <div class="warn-box">
+    <strong>Manta 遇見能見度差</strong>：Manta Ray 常出現在浮游生物豐富的低能見度水域，視野差，拍照困難。
+  </div>
+  <div class="info-box">
+    <strong>2027 船期尚未公告</strong>：Infinity X 等 2027 確切班次仍需持續追蹤。目前已知 Carpe Diem 2027 Spring 有船期（Feb 06–18 含春節）。
+  </div>
+
+  <!-- Pros / Cons -->
+  <div class="section-header">✅ 優缺點</div>
+  <div class="pro-con">
+    <div class="pros">
+      <h4>✅ 正面</h4>
+      <ul>
+        <li>大物密度全球頂尖</li>
+        <li>虎鯊最穩定的地點之一</li>
+        <li>珊瑚健康（遠離人群）</li>
+        <li>WWII 沉船特色</li>
+        <li>季節明確（12–3月）</li>
+        <li>我們方案 6 人 9 折 CP 高</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>⚠️ 挑戰</h4>
+      <ul>
+        <li>需 AOW + 100 潛</li>
+        <li>Tiger Zoo 投餌爭議</li>
+        <li>Manta 能見度差</li>
+        <li>後勤複雜（需搭國內線）</li>
+        <li>旺季機票競爭激烈</li>
+        <li>2027 船期尚未發布</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== KOMODO ===== -->
+<div id="tab-kom" class="section">
+
+  <div class="price-banner price-banner-purple">
+    <div class="main-price">USD 1,295 – 3,000+ /人</div>
+    <div class="sub-price">NT$41,440 – 96,000+ / 人（不含機票）</div>
+    <div class="label">依天數及船宿等級差異大 · 5–7 晚最受歡迎</div>
+  </div>
+
+  <!-- 船宿選擇 -->
+  <div class="section-header">🚢 科莫多船宿全覽</div>
+  <div class="card">
+    <table class="tbl">
+      <tr><th>船名</th><th>定位</th><th>天數</th><th>USD/人</th><th>TWD</th><th>特色</th></tr>
+      <tr>
+        <td><strong>Nusantara</strong></td><td>超預算</td><td>2–3N</td>
+        <td>$400–700</td><td>NT$12,800–22,400</td><td>背包客宿舍，最便宜</td>
+      </tr>
+      <tr>
+        <td><strong>Queenesia</strong></td><td>預算</td><td>5N</td>
+        <td>~$900–1,000</td><td>NT$28,800–32,000</td><td>龍島參觀含，8 人</td>
+      </tr>
+      <tr>
+        <td><strong>Akomo Isseki</strong></td><td>背包中階</td><td>5–11N</td>
+        <td>~$1,200–1,800</td><td>NT$38,400–57,600</td><td>DivingSquad #1，超社交</td>
+      </tr>
+      <tr style="background:rgba(94,58,135,0.2)">
+        <td><strong>Komodo Sea Dragon (Neptune)</strong></td><td>中端</td><td>7D6N</td>
+        <td>$1,646</td><td>NT$52,700</td><td>我們去年研究過的 CP 王</td>
+      </tr>
+      <tr>
+        <td><strong>La Galigo</strong></td><td>中高端</td><td>5–7N</td>
+        <td>~$1,800–2,500</td><td>NT$57,600–80,000</td><td>高 CP 套房，14 人</td>
+      </tr>
+      <tr>
+        <td><strong>Carpe Diem (Indonesia)</strong></td><td>中高端</td><td>5–7N</td>
+        <td>~$2,000–2,800</td><td>NT$64,000–89,600</td><td>35m，8 人精緻</td>
+      </tr>
+      <tr>
+        <td><strong>Damai I / Damai II</strong></td><td>高端</td><td>7–10N</td>
+        <td>~$2,500–3,500</td><td>NT$80,000–112,000</td><td>DiveHappy 首選，含 Saleh Bay 鯨鯊</td>
+      </tr>
+      <tr>
+        <td><strong>Solitude Adventurer</strong></td><td>中高端</td><td>7N</td>
+        <td>$3,000+</td><td>NT$96,000+</td><td>18 人雙體船，DiveHappy 推薦</td>
+      </tr>
+      <tr>
+        <td><strong>Komodo Aggressor</strong></td><td>高端</td><td>8D7N</td>
+        <td>€2,836+</td><td>NT$96,000+</td><td>Phinisi 風格，16 人，8 艙</td>
+      </tr>
+      <tr>
+        <td><strong>Gaia Love</strong></td><td>頂端</td><td>9–11N</td>
+        <td>~$4,000+</td><td>NT$128,000+</td><td>22 人現代遊艇，私人陽台</td>
+      </tr>
+      <tr>
+        <td><strong>Scubaspa Zen</strong></td><td>奢華 Spa</td><td>7–10N</td>
+        <td>~$4,500+</td><td>NT$144,000+</td><td>53m，Spa + 瑜伽 + 私廚</td>
+      </tr>
+      <tr>
+        <td><strong>Adelaar</strong></td><td>終極奢華</td><td>6–10N</td>
+        <td>~$5,000+</td><td>NT$160,000+</td><td>39m 荷蘭帆船，8人，大理石浴室</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 翼潛社科莫多報價 -->
+  <div class="section-header">🇨🇳 翼潛社台灣/大陸聯繫管道</div>
+  <div class="card">
+    <table class="tbl">
+      <tr><th>船宿</th><th>天數</th><th>翼潛社報價 USD</th><th>TWD</th></tr>
+      <tr class="rec"><td><strong>Komodo Sea Dragon</strong></td><td>6D5N</td><td class="highlight">$1,268（展覽促銷）</td><td>NT$40,600</td></tr>
+      <tr><td>Komodo Sea Dragon</td><td>7D6N</td><td>$1,646</td><td>NT$52,700</td></tr>
+      <tr><td>Komodo Sea Dragon</td><td>8D7N</td><td>$2,024</td><td>NT$64,800</td></tr>
+      <tr><td>Neptune One</td><td>7D6N</td><td>$1,650</td><td>NT$52,800</td></tr>
+      <tr><td>New Panunee</td><td>—</td><td>$2,600+</td><td>NT$83,200+</td></tr>
+    </table>
+  </div>
+
+  <!-- 核心潛點 -->
+  <div class="section-header">🌊 核心潛點</div>
+  <div class="card">
+    <div style="display:flex; flex-wrap:wrap; gap:8px">
+      <span class="tag tag-purple">🐟 Batu Bolong 珊瑚地毯</span>
+      <span class="tag tag-purple">💎 Crystal Rock 大物</span>
+      <span class="tag tag-purple">🦋 Manta Point 清潔站</span>
+      <span class="tag tag-purple">🐚 Cannibal Rock 底棲</span>
+      <span class="tag tag-purple">🦈 Castle Rock 灰礁鯊群</span>
+      <span class="tag tag-blue">🐲 Komodo Dragon 陸行</span>
+      <span class="tag tag-blue">🐋 Saleh Bay 鯨鯊（高端路線）</span>
+      <span class="tag tag-blue">🌋 Sangeang 火山黑沙</span>
+    </div>
+  </div>
+
+  <!-- 季節 -->
+  <div class="section-header">📅 最佳潛水季節</div>
+  <div class="card">
+    <table class="tbl">
+      <tr><th>月份</th><th>北/中部</th><th>南部</th><th>特色大物</th></tr>
+      <tr style="background:rgba(45,122,58,0.15)"><td><strong>5–9 月</strong></td><td class="highlight">⭐ 最佳</td><td>浪況稍大</td><td>Mola Mola（8月）</td></tr>
+      <tr style="background:rgba(201,147,10,0.1)"><td><strong>12–2 月</strong></td><td class="warn-text">能見度稍差</td><td class="highlight">最佳</td><td>🐋 鯨鯊 + Manta 大量</td></tr>
+      <tr><td>11 月 – 4 月</td><td>季風，降雨</td><td>較佳</td><td>Manta 豐富（12–2月）</td></tr>
+    </table>
+    <div class="warn-box" style="margin-top:10px">
+      <strong>⚠️ 2026年4月起：每日 1,000 人配額限制（核心潛點）</strong><br>
+      旺季熱門船期可能快速售罄，建議提早 6 個月以上預訂。
+    </div>
+  </div>
+
+  <!-- 負面評價 -->
+  <div class="section-header">⚠️ 注意事項與負面案例</div>
+  <div class="warn-box">
+    <strong>Indo Aggressor 2024 年 3 月事件</strong>：業者提前 2 天知道因氣候被港務局停止出港，但未通知旅客。旅客登船後才被告知無法出海，且業者宣稱「登船即視為行程完成」，可能影響旅遊保險索賠。（ScubaBoard 真實投訴）
+  </div>
+  <div class="warn-box">
+    <strong>Manta Alley 偶有失望</strong>：DiveHappy Jun 2025 評論：「Manta Alley 此次非常安靜，和去年完全不同。」大物遇見有隨機性，無法保證每次都會有。
+  </div>
+  <div class="warn-box">
+    <strong>季風期能見度變差</strong>：11月–4月降雨可能降低北/中部能見度。需依船長判斷調整路線。
+  </div>
+
+  <!-- Pros / Cons -->
+  <div class="section-header">✅ 優缺點</div>
+  <div class="pro-con">
+    <div class="pros">
+      <h4>✅ 正面</h4>
+      <ul>
+        <li>OW 即可出發，門檻低</li>
+        <li>價格彈性大（$400–5,000+）</li>
+        <li>珊瑚健康、魚種豐富</li>
+        <li>Manta Ray 幾乎必看</li>
+        <li>Komodo Dragon 陸上體驗</li>
+        <li>從 Bali 飛 LBJ 方便</li>
+        <li>Saleh Bay 鯨鯊（部分路線）</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>⚠️ 挑戰</h4>
+      <ul>
+        <li>2026 起遊客配額，需提早訂</li>
+        <li>旺季（5–9月）船期搶手</li>
+        <li>12–2月北部能見度較差</li>
+        <li>大物遇見無保證（Manta Alley）</li>
+        <li>部分業者信譽問題（Indo Aggressor）</li>
+        <li>漂流潛水強度高</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== COMPARISON ===== -->
+<div id="tab-cmp" class="section">
+  <div class="section-header">⚖️ 兩路線核心比對</div>
+
+  <div class="card">
+    <table class="tbl">
+      <tr style="background:rgba(255,255,255,0.08)">
+        <th>比較維度</th>
+        <th style="color:#4FCFA0">🐠 馬代深南線</th>
+        <th style="color:#BF8AEF">🦎 科莫多</th>
+      </tr>
+      <tr>
+        <td>🎯 大物密度</td>
+        <td class="highlight">★★★★★ 虎鯊 / 錘頭 / Thresher</td>
+        <td style="color:#BF8AEF">★★★★☆ Manta / 白尖鯊 / 鯨鯊</td>
+      </tr>
+      <tr>
+        <td>💰 最低入場費（含機票）</td>
+        <td class="warn-text">NT$126,400/人（我們方案）</td>
+        <td style="color:#BF8AEF">NT$50,000–70,000/人（5N）</td>
+      </tr>
+      <tr>
+        <td>🔑 潛水員等級要求</td>
+        <td>AOW + 100 潛（多數業者）</td>
+        <td style="color:#4FCFA0">OW 即可（部分點 AOW 較佳）</td>
+      </tr>
+      <tr>
+        <td>📅 最佳季節</td>
+        <td>12 月 – 3 月（嚴格）</td>
+        <td style="color:#4FCFA0">全年可潛，5–9月最佳</td>
+      </tr>
+      <tr>
+        <td>✈️ 後勤複雜度</td>
+        <td class="warn-text">複雜（需國內線 MLE→GAN）</td>
+        <td style="color:#4FCFA0">相對簡單（DPS→LBJ）</td>
+      </tr>
+      <tr>
+        <td>🏨 船宿選擇數</td>
+        <td>約 10+ 家（GAN 出發）</td>
+        <td style="color:#4FCFA0">50+ 家（各價位）</td>
+      </tr>
+      <tr>
+        <td>🦈 虎鯊</td>
+        <td class="highlight">✅ 主打（Fuvahmulah 全球最穩定）</td>
+        <td>❌ 非主要大物</td>
+      </tr>
+      <tr>
+        <td>🌊 Manta Ray</td>
+        <td>✅ 海洋 Manta（藍水型）</td>
+        <td class="highlight">✅ 最穩定（清潔站）幾乎必見</td>
+      </tr>
+      <tr>
+        <td>🐋 鯨鯊</td>
+        <td>✅ Huvadhu 夜間偶見</td>
+        <td style="color:#BF8AEF">✅ Saleh Bay（部分船宿路線）</td>
+      </tr>
+      <tr>
+        <td>🐠 珊瑚礁生態</td>
+        <td>⭐ 極佳（遠離人群）</td>
+        <td class="highlight">⭐⭐ 世界頂尖（Batu Bolong 等）</td>
+      </tr>
+      <tr>
+        <td>🏛️ 文化 / 陸上體驗</td>
+        <td>有限（馬爾地夫島嶼風情）</td>
+        <td class="highlight">✅ Komodo Dragon 龍！陸上健行</td>
+      </tr>
+      <tr>
+        <td>⚠️ 主要風險</td>
+        <td class="warn-text">強流 + Tiger Zoo 投餌爭議</td>
+        <td class="warn-text">配額搶位 + 部分業者信譽問題</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 推薦選擇指引 -->
+  <div class="section-header">🎯 怎麼選？</div>
+  <div class="compare-grid">
+    <div>
+      <div class="compare-col-title mal-title">選馬代深南線，如果你…</div>
+      <div class="info-box" style="background:rgba(10,126,126,0.12); border-color:rgba(10,126,126,0.3)">
+        ✅ 想看虎鯊、錘頭鯊、Thresher 等稀有大物<br>
+        ✅ AOW + 100 潛以上，技術夠<br>
+        ✅ 不怕後勤麻煩、預算較寬裕<br>
+        ✅ 12–3月行程（春節完美！）<br>
+        ✅ 想要極致稀有的潛水體驗
+      </div>
+    </div>
+    <div>
+      <div class="compare-col-title kom-title">選科莫多，如果你…</div>
+      <div class="info-box" style="background:rgba(94,58,135,0.1); border-color:rgba(94,58,135,0.3)">
+        ✅ OW 或 AOW 均可，入門友善<br>
+        ✅ 預算彈性更大（$1,000–5,000）<br>
+        ✅ 想結合龍島陸上觀光<br>
+        ✅ 旺季（5–9月）行程<br>
+        ✅ 想要更多船宿選擇
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:16px">
+    <strong>🎯 對我們 6 人的建議：</strong><br>
+    2027 春節（2/6–2/13）→ 馬代深南線是最佳選擇。季節完全對（12–3月），Infinity X 6 人 9 折方案 CP 極高，虎鯊、Manta 都在旺季窗口。<br>
+    科莫多更適合作為<strong>下一次旅程</strong>，可考慮 5–7 月出發，選 Neptune Sea Dragon 或 Damai II。
+  </div>
+</div>
+
+<!-- ===== KOL ===== -->
+<div id="tab-kol" class="section">
+  <div class="section-header" style="color:#4FCFA0">🐠 馬代深南線 KOL 評測</div>
+
+  <a href="https://www.youtube.com/watch?v=XUiCzKPqgw4" target="_blank" class="kol-card youtube">
+    <div><span class="kol-icon">▶️</span><span class="kol-title">Fuvahmulah Tiger Shark Madness – 30 Sharks on My 300th</span></div>
+    <div class="kol-desc">YouTube · 2025年2月 · 同時出現 30 條虎鯊！史詩級畫面，強力佐證大物稀缺性</div>
+  </a>
+
+  <a href="https://www.youtube.com/watch?v=6NHE0FT8tcI" target="_blank" class="kol-card youtube">
+    <div><span class="kol-icon">▶️</span><span class="kol-title">Maldives Deep South Liveaboard Scuba Trip Summary | 4K UHD</span></div>
+    <div class="kol-desc">YouTube · 2025年7月 · 從 Male 出發的深南線完整行程記錄，4K 畫質，含 Central + Fuvahmulah</div>
+  </a>
+
+  <a href="https://www.youtube.com/watch?v=M3d4l9_ZdEY" target="_blank" class="kol-card youtube">
+    <div><span class="kol-icon">▶️</span><span class="kol-title">Tiger Sharks of Fuvahmulah, The Maldives</span></div>
+    <div class="kol-desc">YouTube · 2025年3月 · 傳統島嶼風情 + 虎鯊深度介紹，推薦給初次了解深南線的人</div>
+  </a>
+
+  <a href="https://www.youtube.com/watch?v=bAVVftHbEY8" target="_blank" class="kol-card youtube">
+    <div><span class="kol-icon">▶️</span><span class="kol-title">Maldives Tiger Sharks | Emperor Explorer Liveaboard</span></div>
+    <div class="kol-desc">YouTube · Emperor 官方 · 在 Fuvahmulah 深海與虎鯊自然相遇（無投餌）</div>
+  </a>
+
+  <a href="https://www.youtube.com/watch?v=V-Cud6303Yc" target="_blank" class="kol-card youtube">
+    <div><span class="kol-icon">▶️</span><span class="kol-title">Maldives Deep South Atolls Diving on Emperor Serenity | 4K HDR | 2023</span></div>
+    <div class="kol-desc">YouTube · 2023 年實境記錄，Emperor Serenity 船艙條件展示</div>
+  </a>
+
+  <a href="https://bluetrend.media/maldives-deep-south-diving-trip-tiger-shark-manta/" target="_blank" class="kol-card tw">
+    <div><span class="kol-icon">📰</span><span class="kol-title">BlueTrend 藍色脈動 — 馬代深南線全攻略</span></div>
+    <div class="kol-desc">台灣 KOL · 含真實行程 + 虎鯊 / Manta 實拍照片 + Facebook 影片，台灣人視角最詳細攻略</div>
+  </a>
+
+  <a href="https://diveintolife.blog/diving-maldives-deep-south-route-liveaboard/" target="_blank" class="kol-card blog">
+    <div><span class="kol-icon">📝</span><span class="kol-title">DiveIntoLife — Maldives Deep South Route Liveaboard</span></div>
+    <div class="kol-desc">部落格 · 含各 Atoll 潛點詳細說明，適合規劃前閱讀</div>
+  </a>
+
+  <div class="section-header" style="color:#BF8AEF; margin-top:24px">🦎 科莫多 KOL 評測</div>
+
+  <a href="https://divehappy.com/komodo-liveaboard-diving-review-june-2025/" target="_blank" class="kol-card blog">
+    <div><span class="kol-icon">📝</span><span class="kol-title">DiveHappy — Komodo Liveaboard Review June 2025 (Damai II)</span></div>
+    <div class="kol-desc">超詳細 9 天行程：Bima → Saleh Bay（鯨鯊）→ Sangeang 火山 → Komodo 全區。含完整潛點清單及 GPS 座標！</div>
+  </a>
+
+  <a href="https://www.divingsquad.com/best-komodo-liveaboard-reviews/" target="_blank" class="kol-card blog">
+    <div><span class="kol-icon">📝</span><span class="kol-title">DivingSquad — Best Komodo Liveaboards 2026</span></div>
+    <div class="kol-desc">2026 年最完整評比，10 艘船詳細比較，作者親身搭乘 Akomo Isseki 實測，含路線、設施、大物遇見率</div>
+  </a>
+
+  <a href="https://vocus.cc/article/667b78aafd89780001c38850" target="_blank" class="kol-card tw">
+    <div><span class="kol-icon">🇹🇼</span><span class="kol-title">Flyturtlex — 科莫多海龍號 轉機篇</span></div>
+    <div class="kol-desc">台灣潛水 KOL，Vocus 方格子，5 篇超詳細系列文（轉機 / 食宿 / 強流城 / Shotgun / 城堡）</div>
+  </a>
+
+  <a href="https://vocus.cc/article/6690fe1ffd897800016a87e7" target="_blank" class="kol-card tw">
+    <div><span class="kol-icon">🇹🇼</span><span class="kol-title">Flyturtlex — Castle Rock / Shotgun 強流城</span></div>
+    <div class="kol-desc">台灣視角，Castle Rock 強流實況 + 潛水技巧，對計畫去科莫多的台灣人最有參考價值</div>
+  </a>
+
+  <a href="https://vocus.cc/article/6811f4c4fd89780001583a46" target="_blank" class="kol-card tw">
+    <div><span class="kol-icon">🇹🇼</span><span class="kol-title">Vocus — 科莫多各船宿比較文</span></div>
+    <div class="kol-desc">台灣 Vocus，從中文角度比較各科莫多船宿，適合台灣人作決策參考</div>
+  </a>
+</div>
+
+<script>
+function showTab(id, el) {
+  // Hide all sections
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+  // Show selected
+  document.getElementById('tab-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
