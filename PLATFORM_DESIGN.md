@@ -1,9 +1,9 @@
 # 潛旅平台設計總覽
 
-**文件版本：** v0.3  
-**建立日期：** 2026-05-27 ｜ **最後更新：** 2026-05-28  
+**文件版本：** v0.4  
+**建立日期：** 2026-05-27 ｜ **最後更新：** 2026-05-31  
 **維護者：** Yun（Owner）+ 協作潛伴 + Claude（Cowork）  
-**專案狀態：** 🟢 Phase 1 核心功能完成 — 8 個頁籤全部上線（5 硬編碼 + 3 JSON 驅動）
+**專案狀態：** 🟢 Phase 2 完成 — 全資料庫 + 網站已推上 GitHub，UX 改版為通用規劃工具
 
 > 本文件是此 Cowork 專案的「設計記憶」。每次關閉 agent 再重開，新 agent 應先讀本文件，才能理解現況並繼續工作。同時閱讀 `README.md`（資料庫規範）和 `潛水目錄表.md`（目的地速查）。
 
@@ -249,8 +249,11 @@ dive-platform/（新建，GitHub Repo 根目錄）
 | 1-5 | 機票速查 + Skyscanner 深連結 | ✅ | Claude | 完成 2026-05-28 — 第 7 頁籤，讀 flight_index.json，7 條航線月度基準票價格、旺季標示、Skyscanner 深連結 |
 | 1-6 | 船期看板（含狀態顏色）| ✅ | Claude | 完成 2026-05-28 — 第 8 頁籤，讀 schedule_cache.json，5 艘船船期表、狀態顏色（open/sold_out/few_spots）、待詢問事項清單 |
 | 1-7 | 行程方案輸出（列印 / 分享）| ⬜ | Claude | 下一批 |
+| 1-8 | UX 重設計 — 通用規劃工具 | ✅ | Claude | 完成 2026-05-31 — 詳見下方 ADR |
 
 **ADR 2026-05-28**：現有 5 tabs 硬編碼資料已完整，重構風險高。策略改為「新頁籤 JSON 驅動，舊頁籤保持原樣」，待新頁籤穩定後再逐步遷移。
+
+**ADR 2026-05-31**：UX 重設計為通用多人規劃工具（見第八節 ADR 詳細記錄）。
 
 ### Phase 2：GitHub 部署 + 多人協作
 
@@ -258,11 +261,12 @@ dive-platform/（新建，GitHub Repo 根目錄）
 |---|------|------|------|------|
 | 2-1 | Yun 在 GitHub 建立新 Repo | ✅ | Yun | https://github.com/a11ama/dive-planner |
 | 2-2 | Claude 協助設定 GitHub Actions 部署腳本 | ✅ | Claude | `.github/workflows/deploy.yml` 已 push |
-| 2-3 | 整個資料庫 push 到 GitHub（含 MD + JSON + HTML）| ✅ | Claude | 完成 2026-05-28，`潛旅看板.html` 改名為 `index.html` |
+| 2-3 | 整個資料庫 push 到 GitHub（含 MD + JSON + HTML）| ✅ | Claude | 完成 2026-05-31，`潛旅看板.html` 改名為 `index.html`，含 MD 研究文件全部 |
 | 2-4 | 確認 GitHub Pages 部署成功 | ⬜ | Yun | **Repo Settings → Pages → Source 選「GitHub Actions」後首次 push 觸發部署** |
-| 2-5 | 新增 `ONBOARDING.md` + `data/preferences.json` | ✅ | Claude | 完成 2026-05-28，多人協作入門文件 |
+| 2-5 | 新增 `ONBOARDING.md` + `data/preferences.json` | ✅ | Claude | 完成 2026-05-31，多人協作入門文件，含協作者偏好問卷 |
 | 2-6 | 邀請協作者並設定 Collaborator 權限 | ⬜ | Yun | GitHub Repo Settings → Collaborators → Add |
 | 2-7 | 公開 URL 確認並加到本文件 | ⬜ | Yun/Claude | 預計 URL：https://a11ama.github.io/dive-planner/ |
+| 2-8 | UX 改版：移除固定行程橫幅，改為通用工具 | ✅ | Claude | 完成 2026-05-31，見 ADR |
 
 ### Phase 3：定時資料更新設定
 
@@ -289,9 +293,10 @@ dive-platform/（新建，GitHub Repo 根目錄）
 |------|------|
 | 方案 | GitHub Pages（靜態） |
 | Repo URL | https://github.com/a11ama/dive-planner |
-| 網站 URL | https://a11ama.github.io/dive-planner/（需 Yun 開啟 Pages 設定） |
+| 網站 URL | https://a11ama.github.io/dive-planner/（需 Yun 在 Pages 設定啟用） |
 | 資料檔路徑 | `data/`（Repo 根目錄下）|
-| 最後部署時間 | 2026-05-28（首次 push，Pages 尚未啟用）|
+| 最後部署時間 | 2026-05-31（UX 改版 push，Pages 啟用後可正常訪問）|
+| 進入點 | `index.html`（原 `潛旅看板.html`，已改名）|
 
 ---
 
@@ -299,10 +304,14 @@ dive-platform/（新建，GitHub Repo 根目錄）
 
 如果你是接手此專案的新 Agent，請按以下順序閱讀：
 
-1. **本文件（PLATFORM_DESIGN.md）** → 了解整體設計
-2. **README.md** → 了解資料格式規範和研究流程
-3. **潛水目錄表.md** → 了解現有目的地狀態
-4. **查看 Phase 0–1 的 TODO 清單** → 找到第一個 `⬜ 未開始` 的任務繼續做
+1. **本文件（PLATFORM_DESIGN.md）** → 了解整體設計與開發進度
+2. **ONBOARDING.md** → 多人協作快速入門（若你代表協作者，先看這裡）
+3. **README.md** → 資料格式規範和研究流程
+4. **潛水目錄表.md** → 現有目的地狀態（含優先級）
+5. **data/preferences.json** → 潛水偏好設定（Owner Yun 的預設值）
+6. **查看 Phase TODO 清單** → 找到第一個 `⬜ 未開始` 的任務繼續做
+
+> ⚠️ 注意：`潛旅看板.html` 已改名為 `index.html`，不要建立重複的舊檔名
 
 ### 接手時的常見指令對照
 
@@ -326,3 +335,8 @@ dive-platform/（新建，GitHub Repo 根目錄）
 | 2026-05-27 | 機票漲幅以「同月前後三個月均價基準」計算 | 避免節假日固定旺季被誤判為漲價 |
 | 2026-05-28 | 新三個頁籤採用 lazy-load fetch()，舊五個頁籤保持硬編碼 | 降低重構風險；fetch() 在 GitHub Pages 正常運作；本地 file:// 開啟會顯示提示訊息而非直接崩潰 |
 | 2026-05-28 | 業者比較頁使用 JS 篩選器（不用 Vue/React）| 保持零依賴、單檔案架構；業者資料量（23家）不需複雜狀態管理 |
+| 2026-05-31 | 移除 plan-banner 和「2027 計畫」固定頁籤 | 原設計硬編碼春節費用資料，不適合多人通用；改為讓使用者自行進入各功能頁籤查詢 |
+| 2026-05-31 | Header 改為通用標題「潛旅規劃板」 | 移除「翼潛社引薦」等特定代理商字樣，適合多人協作且分享給新朋友時不會造成困惑 |
+| 2026-05-31 | 第一頁改名「潛季指南」並加入 5 步驟使用流程引導 | 新訪問者（尤其協作者朋友）不知從哪裡開始；引導卡片讓 user journey 可視化，降低上手門檻 |
+| 2026-05-31 | 頁籤重排：船期看板移至機票速查之前 | 決策流程是先確認「搶得到艙位」再查機票，調整後與實際使用順序一致 |
+| 2026-05-31 | 新增 ONBOARDING.md + data/preferences.json | 多人協作需要讓協作者的 AI 快速上手；preferences.json 結構化偏好資料供 agent 讀取，不依賴個人私有設定檔 |
