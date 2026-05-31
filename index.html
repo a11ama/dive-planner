@@ -180,34 +180,49 @@
 <body>
 
 <div class="header">
-  <div><h1>🤿 潛旅資料庫</h1><p>台灣出發 · 翼潛社引薦 · 更新：2026-05-12</p></div>
-  <span class="header-badge">9 目的地 · 短 / 中 / 長程 · 整體評價排序</span>
-</div>
-
-<div class="plan-banner">
-  <div class="pb-item"><div class="pb-label">⭐ 2027 春節計畫 · 每人總費用</div><div class="pb-main">NT$ 126,400 – 132,800</div><div class="pb-sub">USD 3,951–4,151（6人同行·Infinity X·9折）</div></div>
-  <div class="pb-item"><div class="pb-label">船宿（9折）</div><div class="pb-main">NT$ 77,400</div><div class="pb-sub">USD 2,419</div></div>
-  <div class="pb-item"><div class="pb-label">國際機票 TPE→MLE</div><div class="pb-main">NT$ 28.8–35.2K</div><div class="pb-sub">USD 900–1,100</div></div>
-  <div class="pb-item"><div class="pb-label">國內線 + 其他</div><div class="pb-main">NT$ 20,200</div><div class="pb-sub">USD ~632</div></div>
-  <div class="pb-warn">⚠ 2027 艙期待確認<br>聯繫 +60 12-355 2588</div>
+  <div><h1>🤿 潛旅規劃板</h1><p>台灣出發 · 從「想去哪潛」到「訂好行程」</p></div>
+  <span class="header-badge">10 目的地 · 短 / 中 / 長程 · 業者比較 · 船期 · 機票</span>
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="switchTab('cal')">🗓 潛水日歷</div>
-  <div class="tab-sep"></div>
-  <div class="tab" onclick="switchTab('plan')">📋 2027 計畫</div>
+  <div class="tab active" onclick="switchTab('cal')">🗓 潛季指南</div>
   <div class="tab-sep"></div>
   <div class="tab" onclick="switchTab('short')">🔵 短程</div>
   <div class="tab" onclick="switchTab('mid')">🟡 中程</div>
   <div class="tab" onclick="switchTab('long')">🔴 長程</div>
   <div class="tab-sep"></div>
   <div class="tab" onclick="switchTab('ops')">🏢 業者比較</div>
-  <div class="tab" onclick="switchTab('flight')">✈️ 機票速查</div>
   <div class="tab" onclick="switchTab('sched')">📅 船期看板</div>
+  <div class="tab" onclick="switchTab('flight')">✈️ 機票速查</div>
 </div>
 
-<!-- ═══ TAB: 潛水日歷 ═══ -->
+<!-- ═══ TAB: 潛季指南 ═══ -->
 <div id="tab-cal" class="content active">
+
+  <!-- 使用流程引導 -->
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px">
+    <div style="flex:1;min-width:160px;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px">
+      <div style="font-size:22px;line-height:1">🗓</div>
+      <div><div style="font-size:12px;font-weight:800;color:var(--teal-dark);margin-bottom:3px">① 何時出發？</div><div style="font-size:11px;color:var(--secondary);line-height:1.5">對照<strong>台灣連假</strong>與各地旺季，找出最佳出行窗口</div></div>
+    </div>
+    <div style="flex:1;min-width:160px;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px">
+      <div style="font-size:22px;line-height:1">🌊</div>
+      <div><div style="font-size:12px;font-weight:800;color:var(--teal-dark);margin-bottom:3px">② 去哪裡潛？</div><div style="font-size:11px;color:var(--secondary);line-height:1.5">依預算選<strong>短 / 中 / 長程</strong>，每個目的地含費用明細與潛店評比</div></div>
+    </div>
+    <div style="flex:1;min-width:160px;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px">
+      <div style="font-size:22px;line-height:1">🏢</div>
+      <div><div style="font-size:12px;font-weight:800;color:var(--teal-dark);margin-bottom:3px">③ 選哪家業者？</div><div style="font-size:11px;color:var(--secondary);line-height:1.5">篩選<strong>船宿 / 潛店 / 度假村</strong>，含真實好評差評對比</div></div>
+    </div>
+    <div style="flex:1;min-width:160px;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px">
+      <div style="font-size:22px;line-height:1">📅</div>
+      <div><div style="font-size:12px;font-weight:800;color:var(--teal-dark);margin-bottom:3px">④ 搶得到艙位？</div><div style="font-size:11px;color:var(--secondary);line-height:1.5">查<strong>船期看板</strong>確認有無空位，追蹤待詢事項</div></div>
+    </div>
+    <div style="flex:1;min-width:160px;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px">
+      <div style="font-size:22px;line-height:1">✈️</div>
+      <div><div style="font-size:12px;font-weight:800;color:var(--teal-dark);margin-bottom:3px">⑤ 機票貴不貴？</div><div style="font-size:11px;color:var(--secondary);line-height:1.5">對照<strong>月度基準票價</strong>，判斷現在買是否合理</div></div>
+    </div>
+  </div>
+
   <div class="sec-head">🗓 亞洲 + 大洋洲潛水月曆 <span class="trip-len-badge">7月→6月 · 每月最佳去處</span></div>
   <div class="info">📍 以台灣出發為基準。★★★ 年度最佳窗口 · ★★ 良好 · ★ 可去但非旺季。橘色警示代表配額限制或封閉。</div>
   <div class="cal-grid">
@@ -272,51 +287,6 @@
       <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇲🇾 斯巴丹 Sipadan</div><div class="cal-dest-note">旺季持續，梭魚 + 海龜</div></div></div>
       <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇯🇵 沖繩 / 慶良間</div><div class="cal-dest-note">夏季入場，珊瑚豐盛期開始</div></div></div>
     </div></div>
-  </div>
-</div>
-
-<!-- ═══ TAB: 2027 計畫 ═══ -->
-<div id="tab-plan" class="content">
-  <div class="kpi-bar">
-    <div class="kpi"><div class="kpi-label">船宿費 / 人（9折）</div><div class="kpi-value">NT$77,400</div><div class="kpi-sub">USD 2,419 · Infinity X Superior</div></div>
-    <div class="kpi"><div class="kpi-label">國際機票 / 人（估）</div><div class="kpi-value">NT$28.8–35.2K</div><div class="kpi-sub">USD 900–1,100</div></div>
-    <div class="kpi"><div class="kpi-label">國內線 MLE⇄GAN</div><div class="kpi-value">NT$11,600</div><div class="kpi-sub">USD 362</div></div>
-    <div class="kpi"><div class="kpi-label">住宿 / 小費 / 保險</div><div class="kpi-value">NT$8,600</div><div class="kpi-sub">USD 270</div></div>
-    <div class="kpi accent"><div class="kpi-label">每人合計</div><div class="kpi-value">NT$126–133K</div><div class="kpi-sub">USD 3,951–4,151</div></div>
-  </div>
-  <div class="note">⚠️ <strong>Prestige Scuba 目前僅公告 2026 年艙期。</strong>2027 年艙期尚未公告，請立即聯繫：WhatsApp <strong>+60 12-355 2588</strong> / info@prestigescuba.com</div>
-  <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px">
-    <div style="background:linear-gradient(135deg,var(--teal-dark),var(--teal-mid));color:#fff;padding:16px 22px;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
-      <div><div style="font-size:18px;font-weight:800">🇲🇻 馬爾地夫深南線 · Infinity X</div><div style="font-size:12px;opacity:.75">2027 年 2 月 6 日（六）– 2 月 13 日（五）· 8天7夜 · 6人成行</div></div>
-      <div style="margin-left:auto;text-align:right"><div style="font-size:10px;opacity:.65;text-transform:uppercase">每人總費用</div><div style="font-size:28px;font-weight:900">USD 3,951–4,151</div><div style="font-size:13px;opacity:.75">NT$ 126,400–132,800</div></div>
-    </div>
-    <div class="cost-row">
-      <div class="cost-cell"><div class="cc-label">🚢 船宿（9折）</div><div class="cc-usd">USD 2,419</div><div class="cc-twd">NT$ 77,400</div></div>
-      <div class="cost-cell"><div class="cc-label">✈ 國際機票 TPE→MLE</div><div class="cc-usd">USD 900–1,100</div><div class="cc-twd">NT$ 28,800–35,200</div></div>
-      <div class="cost-cell"><div class="cc-label">🛫 國內線 MLE⇄GAN</div><div class="cc-usd">USD 362</div><div class="cc-twd">NT$ 11,600</div></div>
-      <div class="cost-cell"><div class="cc-label">📦 住宿 / 小費 / 保險</div><div class="cc-usd">USD ~270</div><div class="cc-twd">NT$ 8,600</div></div>
-    </div>
-    <div style="padding:16px 22px 20px">
-      <div style="font-size:13px;font-weight:700;color:var(--teal);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin-bottom:10px">行程日程</div>
-      <div class="tw"><table>
-        <tr><th>日期</th><th>地點</th><th>活動</th></tr>
-        <tr><td>2/5（五）</td><td>台北 TPE 出發</td><td>建議提前 1 天至 MLE 緩衝</td></tr>
-        <tr><td>2/6（六）D1</td><td>MLE → GAN 登船</td><td>Maldivian 國內線（1h35m）· 安全簡報</td></tr>
-        <tr><td>2/7–2/9</td><td>Fuvahmulah + Huvadhu</td><td>🐯 虎鯊 · 🦈 鐮狀真鯊 · 錘頭鯊</td></tr>
-        <tr><td>2/10–2/11</td><td>Addu Atoll</td><td>🦋 Maa Kandu Manta · ⚓ HMS British Loyalty 沉船</td></tr>
-        <tr><td>2/12（五）</td><td>返航 GAN</td><td>最後早潛 · 送別晚宴</td></tr>
-        <tr><td>2/13（六）</td><td>GAN → 返台</td><td>下船 · 搭國際線回台</td></tr>
-      </table></div>
-      <div style="font-size:13px;font-weight:700;color:var(--teal);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin:16px 0 10px">行動清單</div>
-      <ul class="chklist">
-        <li><div class="cb" onclick="tog(this)"></div><span>聯繫 Prestige Scuba 確認 2027 年 2 月艙期（WhatsApp +60 12-355 2588）</span></li>
-        <li><div class="cb" onclick="tog(this)"></div><span>確認 6 人名單（需 AOW + 100 潛）</span></li>
-        <li><div class="cb" onclick="tog(this)"></div><span>繳定金並確認退款條款</span></li>
-        <li><div class="cb" onclick="tog(this)"></div><span>訂 MLE ↔ GAN 國內線（maldivian.aero）</span></li>
-        <li><div class="cb" onclick="tog(this)"></div><span>設 Google Flights 價格提醒（TPE → MLE）</span></li>
-        <li><div class="cb" onclick="tog(this)"></div><span>購買潛水保險（DAN 或同等）</span></li>
-      </ul>
-    </div>
   </div>
 </div>
 
