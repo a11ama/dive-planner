@@ -80,27 +80,33 @@ Owner（Yun）的 Claude ──┐
 ├── 02_印尼/ … 10_泰國/
 └── …
 
-dive-platform/（新建，GitHub Repo 根目錄）
-├── index.html                 ← 主入口（或 Vue 打包後）
+dive-platform/（GitHub Repo 根目錄）
+├── index.html                 ← 主看板（潛季指南 + 目的地列表 + 業者 + 船期 + 機票）
+├── destination.html           ← ⚠️ 通用 placeholder，由 ?id=X 顯示目的地名稱（待擴充）
+├── destinations/              ← 各目的地獨立頁（待建）
+│   ├── kerama.html
+│   ├── malapascua.html
+│   ├── okinawa.html
+│   ├── bohol.html
+│   ├── cebu.html
+│   ├── sipadan.html
+│   ├── komodo.html
+│   ├── raja.html
+│   └── maldives.html
 ├── data/
-│   ├── destinations.json      ← 目的地資料（從 MD 轉換）
-│   ├── operators.json         ← 業者報價資料（從 MD 轉換）
+│   ├── operators.json         ← 業者報價資料
 │   ├── schedule_cache.json    ← 船期快取（Claude 手動更新）
-│   ├── flight_index.json      ← 基準票價表（定時更新）
-│   └── holidays_tw.json       ← 台灣連假日曆（一次性寫入 3 年）
-├── src/
-│   ├── components/
-│   │   ├── DestinationMap.vue
-│   │   ├── SeasonCalendar.vue
-│   │   ├── OperatorCompare.vue
-│   │   ├── FlightWatch.vue
-│   │   └── TripExport.vue
-│   └── main.js
+│   ├── flight_index.json      ← 基準票價表
+│   └── holidays_tw.json       ← 台灣連假日曆
 └── .github/workflows/
     └── deploy.yml             ← 自動部署到 GitHub Pages
 ```
 
-> **注意：** `dive-platform/` 目前尚未建立，是下一階段的工作。
+### 目的地頁面建置規範（各 destinations/X.html 建立時適用）
+
+- **連結規範**：潛店 / 船宿名稱必須以 embedded hyperlink（`<a href="官方網站">名稱</a>`）呈現，不使用純文字
+- **內容順序**：① 費用明細速查表 → ② 行程說明 → ③ 潛店/船宿評比（含好差評）→ ④ KOL 攻略卡 → ⑤ 注意事項
+- **placeholder 狀態**：目前所有目的地指向 `destination.html?id=X`（通用 placeholder），各獨立頁待後續 agent 建立
 
 ---
 

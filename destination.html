@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>目的地詳細頁 — 潛旅資料庫</title>
+<style>
+  :root{--teal:#0F6E56;--teal-light:#E1F5EE;--teal-mid:#1D9E75;--teal-dark:#0a5240;--border:#E0E4EA;--bg:#F4F6F9;--white:#fff;--secondary:#555;--muted:#888}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'PingFang TC','Microsoft JhengHei',Arial,sans-serif;background:var(--bg);color:#1A1A1A;font-size:14px;min-height:100vh;display:flex;flex-direction:column}
+  .topbar{background:linear-gradient(135deg,var(--teal-dark),var(--teal-mid));color:#fff;padding:14px 24px;display:flex;align-items:center;gap:12px}
+  .back-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border-radius:20px;padding:5px 14px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;color:#fff;transition:background .15s}
+  .back-btn:hover{background:rgba(255,255,255,.30)}
+  .topbar-title{font-size:16px;font-weight:800}
+  .main{flex:1;display:flex;align-items:center;justify-content:center;padding:48px 24px}
+  .placeholder-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:48px 40px;max-width:520px;width:100%;text-align:center}
+  .dest-icon{font-size:56px;margin-bottom:16px;line-height:1}
+  .dest-name{font-size:24px;font-weight:800;color:var(--teal-dark);margin-bottom:8px}
+  .dest-id{font-size:12px;color:var(--muted);margin-bottom:24px;font-family:monospace}
+  .status-badge{display:inline-block;background:#FFF8E1;color:#E65100;border-radius:20px;padding:5px 16px;font-size:12px;font-weight:700;margin-bottom:24px}
+  .desc{font-size:13px;color:var(--secondary);line-height:1.7;margin-bottom:28px}
+  .feature-list{text-align:left;background:var(--teal-light);border-radius:10px;padding:16px 20px;margin-bottom:28px}
+  .feature-list li{list-style:none;padding:5px 0;font-size:13px;color:#0a4830;border-bottom:1px solid rgba(15,110,86,.12)}
+  .feature-list li:last-child{border-bottom:none}
+  .feature-list li::before{content:'📋 ';margin-right:4px}
+  .back-link{display:inline-block;background:var(--teal);color:#fff;border-radius:8px;padding:10px 24px;font-size:13px;font-weight:700;text-decoration:none;transition:background .15s}
+  .back-link:hover{background:var(--teal-dark)}
+  .footer{text-align:center;padding:16px;font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-btn" href="index.html">← 返回總覽</a>
+  <span class="topbar-title" id="topbar-dest">目的地詳細頁</span>
+</div>
+
+<div class="main">
+  <div class="placeholder-card">
+    <div class="dest-icon" id="dest-icon">🤿</div>
+    <div class="dest-name" id="dest-name">目的地名稱</div>
+    <div class="dest-id" id="dest-id"></div>
+    <div class="status-badge">⚙️ 頁面建置中</div>
+    <div class="desc">
+      此目的地的詳細頁面正在建立中。<br>
+      完成後將包含以下內容，請稍後回來查看：
+    </div>
+    <ul class="feature-list">
+      <li>費用明細（機票 + 船宿/潛店 + 住宿 + 雜費）</li>
+      <li>推薦行程（含排假邏輯與連假配合）</li>
+      <li>潛店 / 船宿評比（含好評與差評）</li>
+      <li>KOL 攻略連結（部落格 · YouTube · ScubaBoard）</li>
+      <li>注意事項 & 訂位行動清單</li>
+    </ul>
+    <a class="back-link" href="index.html">← 回到總覽選擇其他目的地</a>
+  </div>
+</div>
+
+<div class="footer">潛旅資料庫 · 目的地頁面陸續建置中 · 資料由 Claude Cowork 維護</div>
+
+<script>
+var destMeta = {
+  kerama:     { name:'🇯🇵 慶良間諸島',       icon:'🐋' },
+  malapascua: { name:'🇵🇭 媽媽島 Malapascua', icon:'🦈' },
+  okinawa:    { name:'🇯🇵 沖繩本島',          icon:'💙' },
+  bohol:      { name:'🇵🇭 薄荷島 Bohol',      icon:'🐢' },
+  cebu:       { name:'🇵🇭 宿霧 Cebu',         icon:'🐟' },
+  sipadan:    { name:'🇲🇾 斯巴丹 Sipadan',    icon:'🌊' },
+  komodo:     { name:'🇮🇩 科莫多 Komodo',     icon:'🦋' },
+  raja:       { name:'🇮🇩 四王群島 Raja Ampat', icon:'🦋' },
+  maldives:   { name:'🇲🇻 馬代深南線',        icon:'🐯' }
+};
+
+var params = new URLSearchParams(window.location.search);
+var id = params.get('id') || '';
+var meta = destMeta[id];
+if (meta) {
+  document.getElementById('dest-icon').textContent = meta.icon;
+  document.getElementById('dest-name').textContent = meta.name;
+  document.getElementById('topbar-dest').textContent = meta.name;
+  document.title = meta.name + ' — 潛旅資料庫';
+}
+if (id) {
+  document.getElementById('dest-id').textContent = 'id: ' + id;
+}
+</script>
+</body>
+</html>
