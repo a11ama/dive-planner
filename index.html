@@ -66,8 +66,9 @@
   .dest-card:hover{box-shadow:0 4px 18px rgba(15,110,86,.14);transform:translateY(-2px);border-color:var(--teal-mid)}
   .dest-card-header{display:flex;align-items:center;gap:12px;padding:16px 18px;user-select:none}
   .dc-rank{font-size:11px;font-weight:800;color:#fff;background:var(--teal);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .dc-name{font-size:15px;font-weight:800;color:var(--teal-dark);min-width:140px}
-  .dc-animals{font-size:12px;color:var(--secondary);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dc-name{font-size:15px;font-weight:800;color:var(--teal-dark)}
+  .dc-reason{font-size:11px;color:var(--secondary);line-height:1.45;margin-top:3px}
+  .dc-stars{font-size:15px;color:#F59E0B;letter-spacing:2px;flex-shrink:0;margin:0 8px}
   .dc-badges{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;align-items:center}
   .badge{display:inline-block;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600;white-space:nowrap}
   .badge-cost{background:#F0FAF5;color:var(--teal-dark);border:1px solid #C2E8D5}
@@ -269,10 +270,13 @@
     <div class="dc-color-bar color-bar-kerama"></div>
     <div class="dest-card-header">
       <div class="dc-rank">1</div>
-      <div><div class="dc-name">🇯🇵 慶良間諸島</div><div class="dc-animals">🐋 大翅鯨（水中鯨鳴） · 🐢 海龜 · 💎 慶良間藍 30m+</div></div>
+      <div style="flex:1;min-width:0">
+        <div class="dc-name">JP 慶良間諸島</div>
+        <div class="dc-reason">全球唯一水中可聽大翅鯨鳴叫，UNESCO 候選自然遺產，慶良間藍 30m+</div>
+      </div>
+      <div class="dc-stars"><span style="color:#F59E0B">★★★</span></div>
       <div class="dc-badges">
         <span class="badge badge-cost">NT$1.7–2.9萬</span>
-        <span class="badge badge-time">最佳：1–3月（鯨）/ 4–9月</span>
         <span class="badge badge-level">OW</span>
       </div>
       <div class="dc-goto">›</div>
@@ -283,10 +287,13 @@
     <div class="dc-color-bar color-bar-malapascua"></div>
     <div class="dest-card-header">
       <div class="dc-rank">2</div>
-      <div><div class="dc-name">🇵🇭 媽媽島 Malapascua</div><div class="dc-animals">🦈 鐮狀真鯊（全球唯一每天穩定可見） · 🦈 白尖鯊 · 🐍 海蛇</div></div>
+      <div style="flex:1;min-width:0">
+        <div class="dc-name">PH 媽媽島 Malapascua</div>
+        <div class="dc-reason">地球唯一每天穩定可見鐮狀真鯊的地點，清晨清潔站，無可複製</div>
+      </div>
+      <div class="dc-stars"><span style="color:#F59E0B">★★★</span></div>
       <div class="dc-badges">
         <span class="badge badge-cost">NT$1.8–2.7萬</span>
-        <span class="badge badge-time">最佳：1–5月 / 全年可</span>
         <span class="badge badge-level">OW</span>
       </div>
       <div class="dc-goto">›</div>
@@ -297,11 +304,14 @@
     <div class="dc-color-bar color-bar-okinawa"></div>
     <div class="dest-card-header">
       <div class="dc-rank">3</div>
-      <div><div class="dc-name">🇯🇵 沖繩本島</div><div class="dc-animals">💙 青之洞窟 · 🐢 海龜 · ✈️ F4U 沉機</div></div>
+      <div style="flex:1;min-width:0">
+        <div class="dc-name">JP 沖繩本島</div>
+        <div class="dc-reason">青之洞窟光影奇景，直飛 1.5h 零時差，台灣最易到達的海外潛水地</div>
+      </div>
+      <div class="dc-stars"><span style="color:#F59E0B">★★</span><span style="color:#D1D5DB">★</span></div>
       <div class="dc-badges">
         <span class="badge badge-cost">NT$1.3–3.2萬</span>
-        <span class="badge badge-time">最佳：4–9月 / 全年可</span>
-        <span class="badge badge-level">OW / 體驗潛</span>
+        <span class="badge badge-level">OW</span>
       </div>
       <div class="dc-goto">›</div>
     </div>
@@ -311,10 +321,13 @@
     <div class="dc-color-bar color-bar-bohol"></div>
     <div class="dest-card-header">
       <div class="dc-rank">4</div>
-      <div><div class="dc-name">🇵🇭 薄荷島 Bohol</div><div class="dc-animals">🐢 海龜龍捲風 · 🐟 梭魚群 · 🏔 牆潛 Balicasag</div></div>
+      <div style="flex:1;min-width:0">
+        <div class="dc-name">PH 薄荷島 Bohol</div>
+        <div class="dc-reason">Balicasag 海龜龍捲風幾乎保證，陸上有眼鏡猴，適合帶非潛水同伴</div>
+      </div>
+      <div class="dc-stars"><span style="color:#F59E0B">★★</span><span style="color:#D1D5DB">★</span></div>
       <div class="dc-badges">
         <span class="badge badge-cost">NT$2.2–3.2萬</span>
-        <span class="badge badge-time">最佳：3–6月</span>
         <span class="badge badge-level">OW</span>
       </div>
       <div class="dc-goto">›</div>
@@ -325,10 +338,13 @@
     <div class="dc-color-bar color-bar-cebu"></div>
     <div class="dest-card-header">
       <div class="dc-rank">5</div>
-      <div><div class="dc-name">🇵🇭 宿霧 Cebu（多點串聯）</div><div class="dc-animals">🐟 沙丁魚暴風雲（岸潛）· 🦈 鐮狀真鯊 · 🐋 鯨鯊浮潛</div></div>
+      <div style="flex:1;min-width:0">
+        <div class="dc-name">PH 宿霧 Cebu（多點串聯）</div>
+        <div class="dc-reason">沙丁魚暴風雲岸潛即見，一趟可串鐮狀真鯊 + 鯨鯊，性價比高</div>
+      </div>
+      <div class="dc-stars"><span style="color:#F59E0B">★★</span><span style="color:#D1D5DB">★</span></div>
       <div class="dc-badges">
         <span class="badge badge-cost">NT$1.8–3.6萬</span>
-        <span class="badge badge-time">最佳：1–5月</span>
         <span class="badge badge-level">OW</span>
       </div>
       <div class="dc-goto">›</div>
@@ -345,10 +361,13 @@
     <div class="dc-color-bar color-bar-sipadan"></div>
     <div class="dest-card-header">
       <div class="dc-rank">1</div>
-      <div><div class="dc-name">🇲🇾 斯巴丹 Sipadan</div><div class="dc-animals">🐟 梭魚龍捲風 · 🐢 海龜塞車 · 🦈 錘頭鯊 · 垂直牆潛</div></div>
+      <div style="flex:1;min-width:0">
+        <div class="dc-name">MY 斯巴丹 Sipadan</div>
+        <div class="dc-reason">Jacques Cousteau 認定亞洲第一，梭魚龍捲風 + 海龜密度全球最高，垂直火山牆</div>
+      </div>
+      <div class="dc-stars"><span style="color:#F59E0B">★★★</span></div>
       <div class="dc-badges">
         <span class="badge badge-cost">NT$2.6–5.0萬</span>
-        <span class="badge badge-time">最佳：4–10月 ⚠️ 11月封閉</span>
         <span class="badge badge-level">AOW 必須</span>
       </div>
       <div class="dc-goto">›</div>
@@ -359,11 +378,14 @@
     <div class="dc-color-bar color-bar-komodo"></div>
     <div class="dest-card-header">
       <div class="dc-rank">2</div>
-      <div><div class="dc-name">🇮🇩 科莫多 Komodo</div><div class="dc-animals">🦋 Manta Ray · 🦈 灰礁鯊群 · 🐟 Batu Bolong 珊瑚地毯</div></div>
+      <div style="flex:1;min-width:0">
+        <div class="dc-name">ID 科莫多 Komodo</div>
+        <div class="dc-reason">UNESCO 世界自然遺產，Manta 清潔站幾乎每潛必見，Castle Rock 灰礁鯊群壯觀</div>
+      </div>
+      <div class="dc-stars"><span style="color:#F59E0B">★★★</span></div>
       <div class="dc-badges">
         <span class="badge badge-cost">NT$5.3–12.0萬</span>
-        <span class="badge badge-time">最佳：5–9月</span>
-        <span class="badge badge-level">OW（Castle Rock 建議 AOW）</span>
+        <span class="badge badge-level">OW / AOW</span>
       </div>
       <div class="dc-goto">›</div>
     </div>
@@ -379,11 +401,14 @@
     <div class="dc-color-bar color-bar-raja"></div>
     <div class="dest-card-header">
       <div class="dc-rank">1</div>
-      <div><div class="dc-name">🇮🇩 四王群島 Raja Ampat</div><div class="dc-animals">🦋 Manta 20–30隻（2月） · 🐠 全球最高生物多樣性 · 🦈 鬚鯊 / Walking Shark</div></div>
+      <div style="flex:1;min-width:0">
+        <div class="dc-name">ID 四王群島 Raja Ampat</div>
+        <div class="dc-reason">全球最高海洋生物多樣性（75% 世界珊瑚物種），2月 Manta 群舞 20–30 隻，Walking Shark</div>
+      </div>
+      <div class="dc-stars"><span style="color:#F59E0B">★★★</span></div>
       <div class="dc-badges">
         <span class="badge badge-cost">NT$10–15萬</span>
-        <span class="badge badge-time">最佳：10月–4月</span>
-        <span class="badge badge-level">OW（強流點 AOW）</span>
+        <span class="badge badge-level">OW / AOW</span>
       </div>
       <div class="dc-goto">›</div>
     </div>
@@ -393,11 +418,14 @@
     <div class="dc-color-bar color-bar-maldives"></div>
     <div class="dest-card-header">
       <div class="dc-rank">2</div>
-      <div><div class="dc-name">🇲🇻 馬代深南線 Deep South</div><div class="dc-animals">🐯 虎鯊（全球密度最高） · 🦈 鐮狀真鯊 · 🦋 大洋 Manta · ⚓ 沉船</div></div>
+      <div style="flex:1;min-width:0">
+        <div class="dc-name">MV 馬代深南線 Deep South</div>
+        <div class="dc-reason">全球虎鯊密度最高，春節完美配合 8D7N，AOW+100潛門檻自動篩選同行水準</div>
+      </div>
+      <div class="dc-stars"><span style="color:#F59E0B">★★★</span></div>
       <div class="dc-badges">
         <span class="badge badge-cost">NT$12.7–13.3萬</span>
-        <span class="badge badge-time">最佳：2月 ⭐ 春節</span>
-        <span class="badge badge-level">AOW + 100潛 強制</span>
+        <span class="badge badge-level">AOW + 100潛</span>
       </div>
       <div class="dc-goto">›</div>
     </div>
