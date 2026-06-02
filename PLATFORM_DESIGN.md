@@ -286,10 +286,41 @@ dive-platform/（GitHub Repo 根目錄）
 
 | # | 任務 | 狀態 | 負責 | 說明 |
 |---|------|------|------|------|
-| 4-1 | 宿霧 Cebu 完整研究 | ⬜ | Claude | 目錄表標記為「高優先」 |
-| 4-2 | 帛琉 Palau 研究 | ⬜ | Claude | 目錄表標記為「中優先」 |
-| 4-3 | 斯米蘭詳細資料補完 | ⬜ | Claude | 已去過但資料庫無詳細檔 |
+| 4-1 | 宿霧 Cebu 完整研究 | ✅ | Claude | 完成 2026-05-29 |
+| 4-2 | 帛琉 Palau 研究 | ✅ | Claude | 完成 2026-05-30，補入 destinations.json 2026-06-01 |
+| 4-3 | 斯米蘭詳細資料補完 | ✅ | Claude | 完成 2026-05-13 |
 | 4-4 | 各業者船期表第一次詢問 | ⬜ | Yun | 需要 Yun 透過 WhatsApp 實際詢問或 Claude 代擬詢問訊息 |
+| 4-5 | 全球潛點橫向擴增 | ✅ | Claude | 完成 2026-06-01 — 新增22個目的地空白文件，6個新地區資料夾，destinations.json 擴增至33個目的地 |
+
+### Phase 4 擴增目的地待深研清單（2026-06-01 新增，⬜=待認領）
+
+> 協作者可認領任一目的地，依照 `.skills/dive-research/references/destination-template.md` 格式進行深度研究。
+
+| 目的地 | 難度 | 台灣飛行時間 | 待補充內容 | 優先建議 |
+|------|------|------|------|------|
+| 🇹🇼 綠島 Green Island | ⬜ | 0.5h | 業者名單、費用明細、淡旺季訂位建議 | 🔴 高（台灣人最易成行）|
+| 🇹🇼 蘭嶼 Orchid Island | ⬜ | 0.5h | 業者名單、季節建議、文化注意事項 | 🔴 高 |
+| 🇯🇵 石垣島 Ishigaki | ⬜ | 2.5h | 業者評比、Manta 點詳細說明、訂位攻略 | 🟡 中高 |
+| 🇯🇵 與那國島 Yonaguni | ⬜ | 3h | 錘頭鯊季節確認、業者、水中遺址詳情 | 🟡 中高 |
+| 🇵🇭 科隆 Coron | ⬜ | 4h | 沈船清單詳細說明、業者評比 | 🟡 中高 |
+| 🇵🇭 阿尼洛 Anilao | ⬜ | 3.5h | 業者評比、微距物種清單 | 🟡 中 |
+| 🇮🇩 峇里島 Bali | ⬜ | 5h | 業者評比、Nusa Penida vs Amed vs Tulamben 比較 | 🟡 中 |
+| 🇮🇩 倫邦海峽 Lembeh | ⬜ | 8h | 業者評比、與 Bunaken Combo 行程規劃 | 🟡 中 |
+| 🇦🇺 大堡礁 | ⬜ | 8h | 業者評比、凱恩斯 vs Port Douglas、Live-aboard 推薦 | 🟡 中 |
+| 🇰🇷 濟州島 Jeju | ⬜ | 2.5h | 韓文業者資訊、季節指引 | 🟢 低 |
+| 🇵🇭 土巴他哈礁 Tubbataha | ⬜ | 5h | Live-aboard 業者、3–6月開放資訊 | 🟢 低（需 AOW+，費用高）|
+| 🇫🇲 雅浦島 Yap | ⬜ | 7h | Manta Ray Bay Resort 詳情、交通指引 | 🟢 低 |
+| 🇮🇩 瓦卡托比 Wakatobi | ⬜ | 11h | Resort 評比、包機方案 | 🟢 低 |
+| 🇮🇩 布納肯 Bunaken | ⬜ | 8h | 業者評比、與倫邦 Combo 建議 | 🟢 低 |
+| 🇫🇯 斐濟 Fiji | ⬜ | 10h | 業者評比、軟珊瑚 vs 鯊魚潛點選擇 | 🟢 低 |
+| 🇪🇬 紅海 Red Sea Egypt | ⬜ | 14h | 業者評比、安全評估、SS Thistlegorm 詳情 | 🟢 低 |
+| 🇫🇲 楚克潟湖 Truk Lagoon | ⬜ | 10h | 主要沈船詳細說明、交通安排 | 🟢 低 |
+| 🇵🇫 法屬玻里尼西亞 | ⬜ | 14h | Fakarava 鯊魚季詳情、業者評比 | 🟢 低 |
+| 🇵🇬 巴布亞新幾內亞 | ⬜ | 8h | 安全評估、Live-aboard 建議 | 🟢 低（治安需謹慎）|
+| 🇸🇨 塞席爾 | ⬜ | 15h | 業者評比、費用確認 | 🟢 低 |
+| 🇪🇨 加拉巴哥群島 | ⬜ | 22h | Live-aboard 評比、Darwin/Wolf 詳情 | 🟢 低（費用最高）|
+| 🇲🇽 科蘇梅爾 Cozumel | ⬜ | 20h | 業者評比、Palancar 潛點說明 | 🟢 低 |
+| 🇲🇽 索科羅群島 Socorro | ⬜ | 18h | Live-aboard 評比、Manta 互動詳情 | 🟢 低（費用高）|
 
 ---
 
