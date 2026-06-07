@@ -53,6 +53,9 @@
   .cal-dest-name{font-weight:700;color:var(--dark)}
   .cal-dest-note{color:var(--secondary);font-size:11px}
   .cal-warn{background:#FFF3CD;border-radius:5px;padding:5px 9px;font-size:11px;color:#7A5500;margin-top:8px;line-height:1.5}
+  .cal-entry.has-link{cursor:pointer;border-radius:6px;margin:0 -6px;padding:5px 6px;transition:background .12s}
+  .cal-entry.has-link:hover{background:var(--teal-light)}
+  .cal-entry.has-link .cal-dest-name{color:var(--teal-dark);text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(15,110,86,.35)}
   .cm-jul{background:linear-gradient(135deg,#0a5240,#0F6E56)}.cm-aug{background:linear-gradient(135deg,#064E3B,#0F9268)}
   .cm-sep{background:linear-gradient(135deg,#1a4a1a,#2E7D32)}.cm-oct{background:linear-gradient(135deg,#7A3D06,#BA7517)}
   .cm-nov{background:linear-gradient(135deg,#5a2d00,#A0522D)}.cm-dec{background:linear-gradient(135deg,#1a2e44,#264D7A)}
@@ -474,6 +477,34 @@
 
 <script>
 var _loaded={},_ops=null,_opsFilter={dest:'all',type:'all'};
+
+// ══ 潛季月曆：目的地名稱可點擊 ══
+(function(){
+  var destPairs=[
+    ['科莫多','komodo'],
+    ['Sipadan','sipadan'],['斯巴丹','sipadan'],
+    ['Malapascua','malapascua'],['媽媽島','malapascua'],
+    ['Raja Ampat','raja'],['四王','raja'],
+    ['Bohol','bohol'],['薄荷島','bohol'],
+    ['馬代','maldives'],
+    ['沖繩','okinawa'],
+    ['慶良間','kerama']
+  ];
+  document.querySelectorAll('.cal-dest-name').forEach(function(el){
+    var text=el.textContent;
+    var destId=null;
+    for(var i=0;i<destPairs.length;i++){
+      if(text.indexOf(destPairs[i][0])!==-1){destId=destPairs[i][1];break;}
+    }
+    if(destId){
+      var entry=el.closest('.cal-entry');
+      entry.classList.add('has-link');
+      (function(id){
+        entry.addEventListener('click',function(){location.href='destination.html?id='+id;});
+      })(destId);
+    }
+  });
+})();
 
 function switchTab(t){
   document.querySelectorAll('.tab').forEach(function(e){e.classList.remove('active');});
