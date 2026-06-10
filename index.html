@@ -122,6 +122,31 @@
   .month-cell.peak .mc-price{color:#7A3D06}
   .sky-btn{display:inline-block;background:var(--teal);color:#fff;border-radius:5px;padding:6px 14px;font-size:12px;font-weight:700;text-decoration:none;margin-top:8px;transition:background .15s}
   .sky-btn:hover{background:var(--teal-dark);color:#fff}
+  /* 請假攻略 */
+  .lv-card{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px}
+  .lv-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 16px;background:linear-gradient(135deg,#085041,#1D9E75);color:#fff}
+  .lv-name{font-size:15px;font-weight:800}
+  .lv-dates{font-size:12px;opacity:.85}
+  .lv-base{font-size:11px;background:rgba(255,255,255,.2);border-radius:12px;padding:2px 10px;white-space:nowrap}
+  .lv-soon{font-size:11px;background:#FAEEDA;color:#7A3D06;border-radius:12px;padding:2px 10px;font-weight:700;white-space:nowrap}
+  .lv-plan{display:flex;gap:12px;padding:11px 16px;border-bottom:1px solid #EEF;align-items:flex-start}
+  .lv-plan:last-child{border-bottom:none}
+  .lv-plan.lv-best{background:rgba(29,158,117,.06)}
+  .lv-ask{flex-shrink:0;min-width:72px;text-align:center;background:var(--teal-light);color:var(--teal-dark);border-radius:8px;padding:6px 8px;font-size:12px;font-weight:800}
+  .lv-ask.lv-ask0{background:#EEF0F4;color:#556}
+  .lv-detail{flex:1;min-width:0}
+  .lv-days{font-size:13px;font-weight:800;color:var(--dark)}
+  .lv-when{font-size:11px;color:var(--secondary);margin-top:2px}
+  .lv-tag{display:inline-block;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700;vertical-align:1px}
+  .lv-good{background:#E8F5E9;color:#2E7D32}
+  .lv-mid{background:#FFF8E1;color:#92600A}
+  .lv-bad{background:var(--red-light);color:var(--red)}
+  .lv-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+  .lv-chip{display:inline-block;background:var(--white);border:1px solid #C2E8D5;color:var(--teal-dark);border-radius:14px;padding:3px 11px;font-size:11px;font-weight:700;text-decoration:none;transition:all .15s}
+  .lv-chip:hover{background:var(--teal-light);border-color:var(--teal-mid)}
+  .lv-chip-none{display:inline-block;background:#F4F6F9;color:var(--muted);border-radius:14px;padding:3px 11px;font-size:11px}
+  .lv-note{padding:9px 16px;background:var(--amber-light);font-size:11px;color:#6B3D00;line-height:1.5}
+  @media(max-width:600px){.lv-plan{flex-direction:column;gap:6px}.lv-ask{min-width:0;align-self:flex-start}}
   /* ── Schedule Board ── */
   .sched-card{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:0}
   .sched-cards{display:flex;flex-direction:column;gap:16px;margin-top:12px}
@@ -162,6 +187,7 @@
 
 <div class="tabs">
   <div class="tab active" onclick="switchTab('cal')">🗓 潛季指南</div>
+  <div class="tab" onclick="switchTab('leave')">🏖 請假攻略</div>
   <div class="tab-sep"></div>
   <div class="tab" onclick="switchTab('short')">🔵 短程</div>
   <div class="tab" onclick="switchTab('mid')">🟡 中程</div>
@@ -262,6 +288,14 @@
       <div class="cal-entry"><div class="cal-stars">★★</div><div><div class="cal-dest-name">🇯🇵 沖繩 / 慶良間</div><div class="cal-dest-note">夏季入場，珊瑚豐盛期開始</div></div></div>
     </div></div>
   </div>
+</div>
+
+<!-- ═══ TAB: 請假攻略 ═══ -->
+<div id="tab-leave" class="content">
+  <div class="sec-head">🏖 請假攻略 <span class="trip-len-badge">未來 12 個月 · 連假 × 請假 × 目的地匹配</span></div>
+  <div class="info">⚡ <strong>請假心法：</strong>多數會議集中在<strong>週一、週二</strong>，同樣請 1 天，把假請在<strong>週四、週五</strong>的成本更低。標記說明：<span class="lv-tag lv-good">✦ 四五型</span> 全請週三〜五（首選）｜<span class="lv-tag lv-mid">◐ 含週二</span> 次佳｜<span class="lv-tag lv-bad">⚠ 含週一二</span> 會議成本高，能避則避。</div>
+  <div class="note">📌 已套用台灣官方行事曆：2025 下半年起無補班日。斯巴丹 2026/11 全月封閉、斯米蘭 5/16–10/31 封閉已自動排除。點目的地籤直接進入細分頁。</div>
+  <div id="leave-container"></div>
 </div>
 
 <!-- ═══ TAB: 短程 ═══ -->
@@ -515,6 +549,130 @@ function switchTab(t){
   if(t==='flight' &&!_loaded.flight) loadFlights();
   if(t==='sched'  &&!_loaded.sched)  loadSchedule();
 }
+
+// ══ 請假攻略 ══
+var LV_DESTS=[
+ {id:'kerama',label:'🇯🇵 慶良間 4D3N',days:4,months:[1,2,3,4,5,6,7,8,9]},
+ {id:'okinawa',label:'🇯🇵 沖繩本島 4D3N',days:4,months:[1,2,3,4,5,6,7,8,9,10,11,12]},
+ {id:'malapascua',label:'🇵🇭 媽媽島 5D4N',days:5,months:[11,12,1,2,3,4,5]},
+ {id:'cebu',label:'🇵🇭 宿霧 5D4N',days:5,months:[1,2,3,4,5]},
+ {id:'bohol',label:'🇵🇭 薄荷島 5D4N',days:5,months:[3,4,5,6]},
+ {id:'sipadan',label:'🇲🇾 斯巴丹 5D4N · AOW',days:5,months:[4,5,6,7,8,9,10]},
+ {id:'komodo',label:'🇮🇩 科莫多 7D6N',days:7,months:[5,6,7,8,9]},
+ {id:'maldives',label:'🇲🇻 馬代深南 8D7N · AOW+100潛',days:8,months:[12,1,2,3]},
+ {id:'raja',label:'🇮🇩 四王群島 9D8N',days:9,months:[10,11,12,1,2,3,4]}
+];
+var LV_WINDOWS=[
+ {name:'🐉 端午連假',dates:'2026/6/19（五）–6/21（日）',start:'2026-06-19',end:'2026-06-21',base:3,months:[6],
+  plans:[
+   {ask:0,total:3,when:'6/19–6/21，免請假',tag:null},
+   {ask:1,total:4,when:'請 6/18（四）→ 6/18–6/21',tag:'good',best:true},
+   {ask:2,total:5,when:'請 6/17–18（三、四）→ 6/17–6/21',tag:'good'},
+   {ask:5,total:10,when:'請 6/22–26（一〜五）→ 6/19–6/28',tag:'bad'}
+  ],note:'6 月科莫多正旺；請 5 天 10 連休可上 7D6N 船宿，但整週請好請滿，建議提早報備。'},
+ {name:'🥮 中秋 × 教師節連假',dates:'2026/9/25（五）–9/28（一）',start:'2026-09-25',end:'2026-09-28',base:4,months:[9,10],
+  plans:[
+   {ask:0,total:4,when:'9/25–9/28，免請假',tag:null},
+   {ask:1,total:5,when:'請 9/24（四）→ 9/24–9/28',tag:'good',best:true},
+   {ask:2,total:6,when:'請 9/23–24（三、四）→ 9/23–9/28',tag:'good'},
+   {ask:4,total:10,when:'請 9/29–10/2（二〜五）→ 9/25–10/4',tag:'mid'}
+  ],note:'9 月科莫多旺季尾聲；請 4 天（二〜五）10 連休可排 7D6N 船宿，只吃到一個週二。'},
+ {name:'🇹🇼 國慶連假',dates:'2026/10/9（五）–10/11（日）',start:'2026-10-09',end:'2026-10-11',base:3,months:[10],
+  plans:[
+   {ask:0,total:3,when:'10/9–10/11，免請假',tag:null},
+   {ask:1,total:4,when:'請 10/8（四）→ 10/8–10/11',tag:'good',best:true},
+   {ask:2,total:5,when:'請 10/7–8（三、四）→ 10/7–10/11',tag:'good'},
+   {ask:4,total:9,when:'請 10/5–8（一〜四）→ 10/3–10/11',tag:'bad'}
+  ],note:'10 月是斯巴丹旺季最後一個月（11 月全月封閉）；四王群島 10 月開季。'},
+ {name:'🎗 光復節連假',dates:'2026/10/24（六）–10/26（一）',start:'2026-10-24',end:'2026-10-26',base:3,months:[10],
+  plans:[
+   {ask:0,total:3,when:'10/24–10/26，免請假',tag:null},
+   {ask:1,total:4,when:'請 10/23（五）→ 10/23–10/26',tag:'good',best:true},
+   {ask:4,total:9,when:'請 10/27–30（二〜五）→ 10/24–11/1',tag:'mid'}
+  ],note:'⚠ 行程跨入 11 月者注意：斯巴丹 2026/11 全月封閉，改選四王群島或沖繩。'},
+ {name:'🎄 行憲 × 元旦跨年',dates:'2026/12/25（五）–2027/1/3（日）',start:'2026-12-25',end:'2027-01-03',base:3,months:[12,1],
+  plans:[
+   {ask:0,total:3,when:'12/25–12/27 與 1/1–1/3 各 3 天，免請假',tag:null},
+   {ask:1,total:4,when:'請 12/24（四）→ 12/24–12/27',tag:'good'},
+   {ask:4,total:10,when:'請 12/28–31（一〜四）→ 12/25–1/3 串起雙連假',tag:'bad',best:true}
+  ],note:'請 4 天換 10 連休、又涵蓋馬代虎鯊季與四王 Manta 季 —— 全年 CP 值最高的「⚠ 例外」，值得吃下週一二。'},
+ {name:'🏮 春節連假',dates:'2027/2/4（四）–2/10（三）',start:'2027-02-04',end:'2027-02-10',base:7,months:[2],
+  plans:[
+   {ask:0,total:7,when:'2/4–2/10，免請假',tag:null},
+   {ask:2,total:11,when:'請 2/11–12（四、五）→ 2/4–2/14',tag:'good',best:true},
+   {ask:3,total:12,when:'請 2/1–3（一〜三）→ 1/30–2/10',tag:'bad'}
+  ],note:'請 2/11–12 共 11 連休＝完美對接四王 New Panunee RAM04（2/6–2/14，售罄可候補）與馬代 2 月虎鯊季頂峰。2 月機票為全年最高，建議 6–9 個月前訂。'},
+ {name:'🕊 228 連假',dates:'2027/2/27（六）–3/1（一）',start:'2027-02-27',end:'2027-03-01',base:3,months:[3],
+  plans:[
+   {ask:0,total:3,when:'2/27–3/1，免請假',tag:null},
+   {ask:1,total:4,when:'請 2/26（五）→ 2/26–3/1',tag:'good',best:true},
+   {ask:4,total:9,when:'請 3/2–5（二〜五）→ 2/27–3/7',tag:'mid'}
+  ],note:'3 月薄荷島旱季開跑，媽媽島、宿霧仍在旺季；馬代虎鯊季最後一個月。'},
+ {name:'🌸 清明 × 兒童節連假',dates:'2027/4/3（六）–4/6（二）',start:'2027-04-03',end:'2027-04-06',base:4,months:[4],
+  plans:[
+   {ask:0,total:4,when:'4/3–4/6，免請假',tag:null},
+   {ask:3,total:9,when:'請 4/7–9（三〜五）→ 4/3–4/11',tag:'good',best:true},
+   {ask:5,total:12,when:'請 3/29–4/2（一〜五）→ 3/27–4/6',tag:'bad'}
+  ],note:'請 3 天換 9 連休且完全避開週一二 —— 全年最優雅的請假窗口。4 月四王群島季末、斯巴丹開季。'},
+ {name:'⚒ 勞動節連假',dates:'2027/4/30（五）–5/2（日）',start:'2027-04-30',end:'2027-05-02',base:3,months:[5],
+  plans:[
+   {ask:0,total:3,when:'4/30–5/2，免請假',tag:null},
+   {ask:1,total:4,when:'請 4/29（四）→ 4/29–5/2',tag:'good',best:true},
+   {ask:2,total:5,when:'請 4/28–29（三、四）→ 4/28–5/2',tag:'good'},
+   {ask:5,total:10,when:'請 5/3–7（一〜五）→ 4/30–5/9',tag:'bad'}
+  ],note:'5 月科莫多開季、薄荷島最佳，媽媽島旺季最後一個月。'},
+ {name:'🐲 端午 2027（6/9 週三，不成連假）',dates:'2027/6/9（三）',start:'2027-06-09',end:'2027-06-09',base:1,months:[6],
+  plans:[
+   {ask:2,total:5,when:'請 6/10–11（四、五）→ 6/9–6/13',tag:'good',best:true},
+   {ask:2,total:5,when:'請 6/7–8（一、二）→ 6/5–6/9',tag:'bad'}
+  ],note:'同樣請 2 天：後請（四、五）完勝前請（一、二），會議損傷最小。'}
+];
+var LV_TAGS={good:'<span class="lv-tag lv-good">✦ 四五型</span>',mid:'<span class="lv-tag lv-mid">◐ 含週二</span>',bad:'<span class="lv-tag lv-bad">⚠ 含週一二</span>'};
+function renderLeave(){
+  var today=new Date();today.setHours(0,0,0,0);
+  var horizon=new Date(today);horizon.setMonth(horizon.getMonth()+12);
+  var html='',soonFound=false;
+  LV_WINDOWS.forEach(function(w){
+    var start=new Date(w.start+'T00:00:00'),end=new Date(w.end+'T23:59:59');
+    if(end<today||start>horizon)return;
+    var diff=Math.ceil((start-today)/86400000);
+    var badge='';
+    if(diff<0)badge='<span class="lv-soon">🔥 進行中</span>';
+    else if(!soonFound){badge='<span class="lv-soon">⏳ 最近 · '+diff+' 天後</span>';soonFound=true;}
+    var avail=LV_DESTS.filter(function(d){
+      return d.months.some(function(m){return w.months.indexOf(m)!==-1;});
+    }).sort(function(a,b){return a.days-b.days;});
+    var prevTotal=0,plansHtml='';
+    w.plans.forEach(function(p){
+      var unlocked=avail.filter(function(d){return d.days<=p.total&&d.days>prevTotal;});
+      var chips;
+      if(unlocked.length){
+        chips=unlocked.map(function(d){
+          return '<a class="lv-chip" href="destination.html?id='+d.id+'">'+d.label+'</a>';
+        }).join('');
+      }else if(p.total<4){
+        chips='<span class="lv-chip-none">3 天內 → 國內離島（小琉球・綠島・蘭嶼）</span>';
+      }else{
+        chips='<span class="lv-chip-none">同上方案目的地皆可，行程更從容</span>';
+      }
+      plansHtml+='<div class="lv-plan'+(p.best?' lv-best':'')+'">'
+        +'<div class="lv-ask'+(p.ask===0?' lv-ask0':'')+'">'+(p.ask===0?'免請假':'請 '+p.ask+' 天')+'</div>'
+        +'<div class="lv-detail">'
+        +'<div class="lv-days">'+p.total+' 連休 '+(p.tag?LV_TAGS[p.tag]:'')+(p.best?' <span class="lv-tag lv-good" style="background:var(--teal);color:#fff">👍 推薦</span>':'')+'</div>'
+        +'<div class="lv-when">'+p.when+'</div>'
+        +'<div class="lv-chips">'+chips+'</div>'
+        +'</div></div>';
+      prevTotal=Math.max(prevTotal,p.total);
+    });
+    html+='<div class="lv-card">'
+      +'<div class="lv-head"><span class="lv-name">'+w.name+'</span><span class="lv-dates">'+w.dates+'</span><span class="lv-base">基礎 '+w.base+' 天</span>'+badge+'</div>'
+      +plansHtml
+      +(w.note?'<div class="lv-note">💡 '+w.note+'</div>':'')
+      +'</div>';
+  });
+  document.getElementById('leave-container').innerHTML=html||'<div class="loading-box">未來 12 個月內沒有可用連假窗口。</div>';
+}
+renderLeave();
 
 // ══ 業者比較 ══
 async function loadOperators(){

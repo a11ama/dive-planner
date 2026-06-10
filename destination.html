@@ -12,7 +12,7 @@
   .back-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);border-radius:20px;padding:5px 14px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;color:#fff;transition:background .15s;white-space:nowrap}
   .back-btn:hover{background:rgba(255,255,255,.35)}
   .topbar-badge{font-size:11px;background:rgba(255,255,255,.18);border-radius:12px;padding:3px 10px;white-space:nowrap}
-  .dest-hero{padding:28px 28px 0}
+  .dest-hero{padding:28px 28px 0;max-width:960px;margin:0 auto}
   .dest-code-badge{display:inline-block;font-size:28px;font-weight:900;letter-spacing:2px;padding:10px 22px;border-radius:10px;color:#fff;margin-bottom:14px;font-family:'Courier New',monospace}
   .dest-fullname{font-size:26px;font-weight:800;color:var(--dark);margin-bottom:6px}
   .dest-tagline{font-size:14px;color:var(--secondary);margin-bottom:16px;line-height:1.55}
@@ -22,16 +22,35 @@
   .mp-cost{background:#F0FAF5;color:var(--teal-dark);border:1px solid #C2E8D5}
   .mp-level{background:#EEF0F4;color:#334;border:1px solid #CDD0D8}
   .mp-season{background:#F3EFFE;color:#5E3A87;border:1px solid #C8B0F0}
-  .content-wrap{padding:0 28px 48px;max-width:960px}
+  .content-wrap{padding:0 28px 48px;max-width:960px;margin:0 auto}
   .sec{margin-top:28px}
   .sec-title{font-size:15px;font-weight:800;color:var(--teal-dark);border-bottom:2px solid var(--teal-light);padding-bottom:7px;margin-bottom:14px}
-  /* Cost table */
-  .cost-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden}
-  .cost-cell{background:var(--white);padding:13px 16px}
-  .cc-label{font-size:11px;color:var(--muted);margin-bottom:5px}
-  .cc-main{font-size:16px;font-weight:800;color:var(--teal)}
-  .cc-sub{font-size:11px;color:var(--secondary);margin-top:2px}
-  .cost-total{background:var(--teal-light);border:1px solid #C2E8D5;border-radius:8px;padding:10px 16px;margin-top:10px;font-size:13px;color:var(--teal-dark);font-weight:700}
+  /* Cost table（直立式） */
+  .cost-table{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:13px}
+  .cost-table td{padding:12px 16px;border-bottom:1px solid #EEF;vertical-align:middle}
+  .cost-table tr:last-child td{border-bottom:none}
+  .ct-label{color:var(--secondary);width:55%}
+  .ct-val{font-size:15px;font-weight:800;color:var(--teal);text-align:right;white-space:nowrap}
+  .ct-sub{font-size:11px;color:var(--muted);font-weight:400;display:block;margin-top:2px}
+  .ct-total td{background:var(--teal-light)}
+  .ct-total .ct-label{font-size:14px;font-weight:800;color:var(--teal-dark)}
+  .ct-total .ct-val{font-size:17px;color:var(--teal-dark)}
+  .cost-note{background:var(--amber-light);border-left:3px solid var(--amber);border-radius:6px;padding:9px 14px;margin-top:10px;font-size:12px;color:#6B3D00;line-height:1.55}
+  /* Flight quick-look */
+  .flight-card{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  .flight-head{background:linear-gradient(135deg,#085041,#1D9E75);color:#fff;padding:12px 16px}
+  .flight-route{font-size:16px;font-weight:800;letter-spacing:.5px}
+  .flight-dest{font-size:12px;opacity:.8;margin-top:2px}
+  .flight-body{padding:12px 14px}
+  .month-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;margin:8px 0}
+  .month-cell{text-align:center;padding:5px 2px;border-radius:4px;font-size:10px;background:#F4F6F9}
+  .month-cell.peak{background:#FAEEDA;color:#7A3D06;font-weight:700}
+  .month-cell.cur-month{outline:2px solid var(--teal-mid)}
+  .mc-label{color:var(--muted);font-size:9px}
+  .mc-price{font-weight:700;color:var(--dark);font-size:10px}
+  .month-cell.peak .mc-price{color:#7A3D06}
+  .sky-btn{display:inline-block;background:var(--teal);color:#fff;border-radius:5px;padding:6px 14px;font-size:12px;font-weight:700;text-decoration:none;margin-top:8px;transition:background .15s}
+  .sky-btn:hover{background:var(--teal-dark);color:#fff}
   /* Highlights */
   .highlight-list{display:flex;flex-direction:column;gap:6px}
   .hl-item{display:flex;align-items:flex-start;gap:10px;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px}
@@ -69,7 +88,7 @@
   .status-open{display:inline-block;background:#E8F5E9;color:#2E7D32;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700}
   .status-sold{display:inline-block;background:var(--red-light);color:var(--red);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700}
   .status-tbd{display:inline-block;background:#EEF0F4;color:#556;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700}
-  @media(max-width:600px){.content-wrap,.dest-hero{padding-left:16px;padding-right:16px}.op-grid{grid-template-columns:1fr}.kol-grid{grid-template-columns:1fr}.cost-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){.content-wrap,.dest-hero{padding-left:16px;padding-right:16px}.op-grid{grid-template-columns:1fr}.kol-grid{grid-template-columns:1fr}.month-grid{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
@@ -451,26 +470,27 @@ if(!d){
     +'<div class="dest-tagline">'+d.tagline+'</div>'
     +'<div class="meta-row">'
     +'<span class="meta-pill mp-stars">'+stars(d.stars)+' '+['','一星','二星','三星'][d.stars]+'推薦</span>'
-    +'<span class="meta-pill mp-cost">'+d.costRange+'</span>'
     +'<span class="meta-pill mp-level">'+d.level+'</span>'
-    +'<span class="meta-pill mp-season">'+d.season+'</span>'
-    +'</div>';
+    +'</div>'
+    +'<div style="font-size:14px;color:var(--secondary);margin:-10px 0 24px">📅 '+d.season+'</div>';
   document.getElementById('dest-hero').innerHTML=heroHtml;
 
   // content
   var html='';
 
-  // cost
+  // cost（直立表格，總費用置頂）
   html+='<div class="sec"><div class="sec-title">費用明細</div>';
-  html+='<div class="cost-grid">';
+  html+='<table class="cost-table">';
+  html+='<tr class="ct-total"><td class="ct-label">💰 總費用（每人）</td><td class="ct-val">'+d.costRange+'</td></tr>';
   d.costItems.forEach(function(c){
-    html+='<div class="cost-cell"><div class="cc-label">'+c.label+'</div>'
-      +'<div class="cc-main">'+c.main+'</div>'
-      +(c.sub?'<div class="cc-sub">'+c.sub+'</div>':'')
-      +'</div>';
+    html+='<tr><td class="ct-label">'+c.label+'</td>'
+      +'<td class="ct-val">'+c.main
+      +(c.sub?'<span class="ct-sub">'+c.sub+'</span>':'')
+      +'</td></tr>';
   });
-  html+='</div>';
-  if(d.costNote) html+='<div class="cost-total">💰 '+d.costNote+'</div>';
+  html+='</table>';
+  if(d.costNote) html+='<div class="cost-note">📌 '+d.costNote+'</div>';
+  html+='<div id="flight-slot"></div>';
   html+='</div>';
 
   // schedule (if exists)
@@ -535,6 +555,51 @@ if(!d){
   }
 
   document.getElementById('dest-content').innerHTML=html;
+  loadFlight(id);
+}
+
+// ── 機票速查（合併自總覽）──
+var FLIGHT_ALIAS={raja:'raja-ampat',maldives:'maldives-deep-south'};
+async function loadFlight(destId){
+  var slot=document.getElementById('flight-slot');
+  if(!slot) return;
+  try{
+    var r=await fetch('data/flight_index.json');
+    if(!r.ok) throw new Error();
+    var data=await r.json();
+    var key=FLIGHT_ALIAS[destId]||destId;
+    var route=data.routes.find(function(rt){
+      return rt.destinationIds && (rt.destinationIds.includes(destId)||rt.destinationIds.includes(key));
+    });
+    if(!route) return;
+    var mLabels=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    var curMonth=new Date().getMonth()+1;
+    var monthHtml='<div class="month-grid">';
+    for(var m=1;m<=12;m++){
+      var price=route.monthlyBaselineTWD[m];
+      var isPeak=route.peakMonths&&route.peakMonths.includes(m);
+      var pStr=price>=10000?(price/1000).toFixed(0)+'K':price;
+      monthHtml+='<div class="month-cell'+(isPeak?' peak':'')+(m===curMonth?' cur-month':'')+'" title="'+mLabels[m-1]+' 基準 NT$'+price+'">'
+        +'<div class="mc-label">'+mLabels[m-1]+'</div><div class="mc-price">$'+pStr+'</div></div>';
+    }
+    monthHtml+='</div>';
+    var confirmedMark=route.sourceConfirmed
+      ?'<span style="background:#E8F5E9;color:#2E7D32;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700">✓ 確認</span>'
+      :'<span style="background:#FFF8E1;color:#E65100;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700">估算</span>';
+    var skyUrl='https://www.skyscanner.com.tw/transport/flights/tpe/'+route.destination.toLowerCase()+'/';
+    slot.innerHTML='<div class="flight-card" style="margin-top:12px">'
+      +'<div class="flight-head"><div class="flight-route">✈️ TPE → '+route.destination+' 月度基準票價</div>'
+      +'<div class="flight-dest">'+route.destinationName+'</div></div>'
+      +'<div class="flight-body">'
+        +'<div style="font-size:11px;color:var(--muted);margin-bottom:6px">📋 '+route.airline_note+' &nbsp;'+confirmedMark+'</div>'
+        +monthHtml
+        +'<div style="font-size:11px;color:var(--secondary);margin:6px 0 4px">📌 '+route.note+'</div>'
+        +'<a class="sky-btn" href="'+skyUrl+'" target="_blank">🔍 Skyscanner 搜尋</a>'
+        +'<span style="font-size:10px;color:var(--muted);margin-left:8px">更新：'+route.lastUpdated+'</span>'
+      +'</div></div>';
+  }catch(e){
+    slot.innerHTML='<div style="font-size:11px;color:var(--muted);margin-top:8px">✈️ 機票月度票價需透過網頁伺服器（GitHub Pages）開啟才會顯示。</div>';
+  }
 }
 </script>
 </body>
